@@ -95,7 +95,7 @@ const App: React.FC = () => {
       <main className="flex-1 min-h-0 max-w-screen-2xl mx-auto w-full p-4 sm:p-6 flex flex-col lg:flex-row gap-4 print:max-w-none print:p-0 print:m-0 print:block print:h-full">
         
         {/* Sidebar Controls - Hidden on Print */}
-        <aside className="w-full lg:w-80 flex-shrink-0 no-print flex flex-col min-h-0 lg:max-h-full">
+        <aside className="w-full lg:w-80 flex-shrink-0 no-print flex flex-col min-h-0 max-h-[50vh] lg:max-h-full">
             <div className="flex-shrink-0 mb-2">
                <h1 className="text-xl font-bold text-gray-800">{t.generator}</h1>
                <p className="text-gray-500 text-xs">{t.configureAndPrint}</p>
