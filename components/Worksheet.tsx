@@ -29,7 +29,7 @@ const Worksheet: React.FC<WorksheetProps> = ({ columnsData }) => {
 
   return (
     <div 
-      className="bg-white shadow-2xl print:shadow-none mx-auto p-4 print:p-0 relative flex flex-col w-full h-full print:w-full print:h-full print:max-w-none print:max-h-none"
+      className="bg-white shadow-2xl print:shadow-none mx-auto p-4 print:p-0 relative flex flex-col min-w-[600px] w-full h-full print:min-w-0 print:w-full print:h-full print:max-w-none print:max-h-none"
       style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}
     >
       {/* Visual aid for screen only */}

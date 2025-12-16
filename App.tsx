@@ -113,7 +113,7 @@ const App: React.FC = () => {
         </aside>
 
         {/* Printable Area Wrapper */}
-        <div className="flex-1 min-h-0 flex justify-center items-start overflow-auto bg-gray-200/50 p-4 lg:p-6 rounded-xl border-2 border-dashed border-gray-300 print:border-none print:p-0 print:bg-white print:block print:w-full print:h-full print:overflow-visible">
+        <div className="flex-1 min-h-0 max-h-[45vh] lg:max-h-full flex justify-center items-start overflow-auto bg-gray-200/50 p-4 lg:p-6 rounded-xl border-2 border-dashed border-gray-300 print:border-none print:p-0 print:bg-white print:block print:w-full print:h-full print:max-h-none print:overflow-visible">
            <Worksheet columnsData={columnsData} />
         </div>
       </main>
