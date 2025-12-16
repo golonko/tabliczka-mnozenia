@@ -74,14 +74,22 @@ const App: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Auto-generate problems when problemCount changes
+  // Auto-generate problems when any relevant setting changes
   useEffect(() => {
     // Skip initial mount (already handled above)
     if (columnsData.length > 0) {
       generate();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings.problemCount]); 
+  }, [
+    settings.problemCount,
+    settings.copies,
+    settings.allowDivision,
+    settings.minResult,
+    settings.maxResult,
+    settings.maxFactor,
+    settings.layout
+  ]); 
 
   const handlePrint = () => {
     window.print();
