@@ -1,6 +1,6 @@
 import React from 'react';
 import { GeneratorSettings } from '../types';
-import { Settings, Printer, RefreshCw, Divide, Copy, Hash, X, Columns, Plus, Minus } from 'lucide-react';
+import { Settings, Printer, RefreshCw, Divide, Copy, Hash, X, Columns, Plus, Minus, Play } from 'lucide-react';
 import { Language, translations } from '../locales';
 
 interface SettingsPanelProps {
@@ -8,6 +8,7 @@ interface SettingsPanelProps {
   onSettingsChange: (newSettings: GeneratorSettings) => void;
   onGenerate: () => void;
   onPrint: () => void;
+  onStartExercise: () => void;
   language: Language;
   onLanguageChange: (lang: Language) => void;
 }
@@ -17,6 +18,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onSettingsChange,
   onGenerate,
   onPrint,
+  onStartExercise,
   language,
   onLanguageChange,
 }) => {
@@ -253,6 +255,13 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       </div>
 
       <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">
+        <button
+          onClick={onStartExercise}
+          className="w-full flex items-center justify-center gap-2 bg-green-600 text-white hover:bg-green-700 py-2 rounded-lg font-medium shadow-md transition-all hover:shadow-lg text-sm"
+        >
+          <Play className="w-4 h-4" />
+          {t.startExercise}
+        </button>
         <button
           onClick={onGenerate}
           className="w-full flex items-center justify-center gap-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 py-2 rounded-lg font-medium transition-colors text-sm"

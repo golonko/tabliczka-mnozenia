@@ -17,6 +17,13 @@ export const translations = {
     printWorksheet: 'Drukuj arkusz',
     generator: 'Generator',
     configureAndPrint: 'Skonfiguruj i wydrukuj zadania.',
+    interactiveExercise: 'Ćwiczenie interaktywne',
+    startExercise: 'Rozpocznij ćwiczenie',
+    backToGenerator: 'Powrót do generatora',
+    checkAnswers: 'Sprawdź odpowiedzi',
+    generateNewSet: 'Generuj nowy zestaw',
+    correctAnswers: 'Poprawne odpowiedzi',
+    totalProblems: 'Razem problemów',
   },
   en: {
     settings: 'Settings',
@@ -34,6 +41,13 @@ export const translations = {
     printWorksheet: 'Print worksheet',
     generator: 'Generator',
     configureAndPrint: 'Configure and print problems.',
+    interactiveExercise: 'Interactive Exercise',
+    startExercise: 'Start Exercise',
+    backToGenerator: 'Back to Generator',
+    checkAnswers: 'Check Answers',
+    generateNewSet: 'Generate New Set',
+    correctAnswers: 'Correct answers',
+    totalProblems: 'Total problems',
   },
 } as const;
 

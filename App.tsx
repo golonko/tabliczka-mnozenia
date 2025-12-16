@@ -1,16 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import SettingsPanel from './components/SettingsPanel';
 import Worksheet from './components/Worksheet';
+import InteractiveExercise from './components/InteractiveExercise';
 import { GeneratorSettings, MathProblem } from './types';
 import { generateProblems } from './services/mathGenerator';
 import { Language, translations } from './locales';
 import { Analytics } from '@vercel/analytics/react';
  
+type Page = 'generator' | 'exercise';
+
 const App: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState<Page>('generator');
   const [settings, setSettings] = useState<GeneratorSettings>({
     problemCount: 20,
     columns: 4,
-    copies: 2, 
+    copies: 2,
     allowMultiplication: true,
     allowDivision: true,
     allowAddition: false,
@@ -89,11 +93,32 @@ const App: React.FC = () => {
     window.print();
   };
 
+  const handleStartExercise = () => {
+    setCurrentPage('exercise');
+  };
+
+  const handleBackToGenerator = () => {
+    setCurrentPage('generator');
+  };
+
+  if (currentPage === 'exercise') {
+    return (
+      <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">
+        <InteractiveExercise
+          settings={settings}
+          language={language}
+          onBackToGenerator={handleBackToGenerator}
+        />
+        <Analytics />
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen flex flex-col bg-gray-50 overflow-hidden print:h-full print:overflow-visible print:block">
       {/* Main Content - takes all available space */}
       <main className="flex-1 min-h-0 max-w-screen-2xl mx-auto w-full p-4 sm:p-6 flex flex-col lg:flex-row gap-4 print:max-w-none print:p-0 print:m-0 print:block print:h-full">
-        
+
         {/* Sidebar Controls - Hidden on Print */}
         <aside className="w-full lg:w-80 flex-shrink-0 no-print flex flex-col min-h-0 max-h-[50vh] lg:max-h-full">
             <div className="flex-shrink-0 mb-2">
@@ -106,6 +131,7 @@ const App: React.FC = () => {
                 onSettingsChange={setSettings}
                 onGenerate={generate}
                 onPrint={handlePrint}
+                onStartExercise={handleStartExercise}
                 language={language}
                 onLanguageChange={setLanguage}
               />
@@ -117,12 +143,12 @@ const App: React.FC = () => {
            <Worksheet columnsData={columnsData} />
         </div>
       </main>
-      
+
       {/* Footer - Hidden on Print */}
       <footer className="flex-shrink-0 bg-white border-t border-gray-200 py-3 text-center text-sm text-gray-500 no-print print:hidden print:!p-0 print:!m-0 print:!h-0 print:!border-0">
         <p>&copy; {new Date().getFullYear()} Wojciech Gołowkow.</p>
       </footer>
-      <Analytics />      
+      <Analytics />
     </div>
   );
 };
