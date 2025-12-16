@@ -13,5 +13,6 @@ export interface GeneratorSettings {
   allowDivision: boolean;
   minResult: number;
   maxResult: number;
+  minFactor: number; // Minimum value for operands/divisors
   maxFactor: number; // Maximum value for operands/divisors
 }

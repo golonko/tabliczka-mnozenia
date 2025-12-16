@@ -5,6 +5,7 @@ export const generateProblems = (
   allowDivision: boolean, 
   minResult: number, 
   maxResult: number,
+  minFactorLimit: number,
   maxFactorLimit: number
 ): MathProblem[] => {
   const problems: MathProblem[] = [];
@@ -18,18 +19,18 @@ export const generateProblems = (
     attempts++;
     
     // Strategy: 
-    // 1. Pick Factor A randomly between 2 and maxFactorLimit
+    // 1. Pick Factor A randomly between minFactorLimit and maxFactorLimit
     // 2. Calculate valid range for Factor B so that product is within [minResult, maxResult]
-    // 3. Ensure Factor B is also <= maxFactorLimit
+    // 3. Ensure Factor B is also within [minFactorLimit, maxFactorLimit]
 
-    const factorA = Math.floor(Math.random() * (maxFactorLimit - 1)) + 2; 
+    const factorA = Math.floor(Math.random() * (maxFactorLimit - minFactorLimit + 1)) + minFactorLimit; 
     
     // Calculate bounds for Factor B based on A to stay within Result Range
     const minB_from_result = Math.ceil(minResult / factorA);
     const maxB_from_result = Math.floor(maxResult / factorA);
 
-    // Factor B must also respect the global max factor limit
-    const minB = Math.max(2, minB_from_result);
+    // Factor B must also respect the global factor limits
+    const minB = Math.max(minFactorLimit, minB_from_result);
     const maxB = Math.min(maxFactorLimit, maxB_from_result);
 
     // If range is invalid, retry with a new Factor A

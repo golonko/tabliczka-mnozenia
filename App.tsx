@@ -12,6 +12,7 @@ const App: React.FC = () => {
     allowDivision: true,
     minResult: 2,
     maxResult: 100,
+    minFactor: 2,
     maxFactor: 10,
   });
 
@@ -29,6 +30,7 @@ const App: React.FC = () => {
         settings.allowDivision,
         settings.minResult,
         settings.maxResult,
+        settings.minFactor,
         settings.maxFactor
       );
       
@@ -64,6 +66,7 @@ const App: React.FC = () => {
     settings.allowDivision,
     settings.minResult,
     settings.maxResult,
+    settings.minFactor,
     settings.maxFactor
   ]); 
 

@@ -114,21 +114,34 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
         </div>
       </div>
 
-      {/* Max Factor */}
+      {/* Factor Range */}
       <div className="space-y-3">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
             <X className="w-4 h-4" />
-            Maksymalny czynnik/dzielnik
+            Zakres czynników/dzielników
         </label>
-        <input 
-            type="number" 
-            value={settings.maxFactor}
-            onChange={(e) => handleChange('maxFactor', Math.max(2, parseInt(e.target.value) || 0))}
-            className="w-full p-2 border border-gray-300 rounded-lg text-sm"
-            placeholder="np. 10"
-        />
+        <div className="flex items-center gap-2">
+            <div className="flex-1">
+                <label className="text-xs text-gray-500 mb-1 block">Od</label>
+                <input 
+                    type="number" 
+                    value={settings.minFactor}
+                    onChange={(e) => handleChange('minFactor', Math.max(2, Math.min(settings.maxFactor, parseInt(e.target.value) || 2)))}
+                    className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                />
+            </div>
+            <div className="flex-1">
+                <label className="text-xs text-gray-500 mb-1 block">Do</label>
+                <input 
+                    type="number" 
+                    value={settings.maxFactor}
+                    onChange={(e) => handleChange('maxFactor', Math.max(settings.minFactor, parseInt(e.target.value) || 2))}
+                    className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                />
+            </div>
+        </div>
         <p className="text-xs text-gray-500">
-           Określa jak duże mogą być liczby użyte w działaniu (np. dla 10: 9•9, dla 20: 15•3).
+           Np. 2-10 da działania typu 5•7, a 5-12 da 8•11.
         </p>
       </div>
 
