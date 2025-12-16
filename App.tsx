@@ -44,30 +44,25 @@ const App: React.FC = () => {
     const COLUMNS_ON_PAGE = settings.layout === 'landscape' ? 4 : 3;
     const newColumns: MathProblem[][] = [];
 
-    // Generate the primary set
-    const primarySet = generateProblems(
+    // Generate sets in groups of 'copies'
+    // Each group will have 'copies' number of identical columns
+    for (let i = 0; i < COLUMNS_ON_PAGE; i += settings.copies) {
+      // Generate one set for this group
+      const groupSet = generateProblems(
         settings.problemCount, 
         settings.allowDivision,
         settings.minResult,
         settings.maxResult,
         settings.maxFactor
-    );
-
-    // Fill the columns
-    for (let i = 0; i < COLUMNS_ON_PAGE; i++) {
-        if (i < settings.copies) {
-            // Use the primary set (copy)
-            newColumns.push(primarySet);
-        } else {
-            // Generate a fresh set for the remaining space
-            newColumns.push(generateProblems(
-                settings.problemCount, 
-                settings.allowDivision,
-                settings.minResult,
-                settings.maxResult,
-                settings.maxFactor
-            ));
-        }
+      );
+      
+      // Fill the columns in this group with the same set
+      const remainingColumns = COLUMNS_ON_PAGE - i;
+      const columnsInThisGroup = Math.min(settings.copies, remainingColumns);
+      
+      for (let j = 0; j < columnsInThisGroup; j++) {
+        newColumns.push(groupSet);
+      }
     }
 
     setColumnsData(newColumns);
