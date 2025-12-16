@@ -12,11 +12,7 @@ export interface Translations {
   problemsPerColumn: string;
   resultRange: string;
   factorRange: string;
-  operations: string;
-  multiplication: string;
   division: string;
-  addition: string;
-  subtraction: string;
   generateNew: string;
   pagesAbbr: string;
   eachPageDifferent: string;
@@ -40,11 +36,7 @@ export const translations: Record<Language, Translations> = {
     problemsPerColumn: 'Liczba działań na kolumnę',
     resultRange: 'Zakres wyników',
     factorRange: 'Zakres czynników',
-    operations: 'Działania',
-    multiplication: 'Mnożenie',
     division: 'Dzielenie',
-    addition: 'Dodawanie',
-    subtraction: 'Odejmowanie',
     generateNew: 'Generuj nowy zestaw',
     pagesAbbr: 'str.',
     eachPageDifferent: 'Każda strona będzie miała inne działania',
@@ -66,11 +58,7 @@ export const translations: Record<Language, Translations> = {
     problemsPerColumn: 'Problems per column',
     resultRange: 'Result range',
     factorRange: 'Factor range',
-    operations: 'Operations',
-    multiplication: 'Multiplication',
     division: 'Division',
-    addition: 'Addition',
-    subtraction: 'Subtraction',
     generateNew: 'Generate new set',
     pagesAbbr: 'pgs',
     eachPageDifferent: 'Each page will have different problems',
