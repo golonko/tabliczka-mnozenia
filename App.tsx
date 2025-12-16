@@ -75,34 +75,34 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 print:min-h-full print:h-full print:block">
-      {/* Header removed as requested */}
-
-      {/* Main Content */}
-      <main className="flex-1 max-w-screen-2xl mx-auto w-full p-4 sm:p-6 flex flex-col lg:flex-row gap-6 print:max-w-none print:p-0 print:m-0 print:block print:h-full">
+    <div className="h-screen flex flex-col bg-gray-50 overflow-hidden print:h-full print:overflow-visible print:block">
+      {/* Main Content - takes all available space */}
+      <main className="flex-1 min-h-0 max-w-screen-2xl mx-auto w-full p-4 sm:p-6 flex flex-col lg:flex-row gap-4 print:max-w-none print:p-0 print:m-0 print:block print:h-full">
         
         {/* Sidebar Controls - Hidden on Print */}
-        <aside className="w-full lg:w-80 flex-shrink-0 no-print">
-            <div className="mb-4 lg:mb-0">
-               <h1 className="text-2xl font-bold text-gray-800 mb-2">Generator</h1>
-               <p className="text-gray-500 text-sm">Skonfiguruj i wydrukuj zadania.</p>
+        <aside className="w-full lg:w-80 flex-shrink-0 no-print flex flex-col min-h-0 lg:max-h-full">
+            <div className="flex-shrink-0 mb-2">
+               <h1 className="text-xl font-bold text-gray-800">Generator</h1>
+               <p className="text-gray-500 text-xs">Skonfiguruj i wydrukuj zadania.</p>
             </div>
-          <SettingsPanel
-            settings={settings}
-            onSettingsChange={setSettings}
-            onGenerate={generate}
-            onPrint={handlePrint}
-          />
+            <div className="flex-1 min-h-0 overflow-auto">
+              <SettingsPanel
+                settings={settings}
+                onSettingsChange={setSettings}
+                onGenerate={generate}
+                onPrint={handlePrint}
+              />
+            </div>
         </aside>
 
         {/* Printable Area Wrapper */}
-        <div className="flex-1 flex justify-center items-start overflow-auto bg-gray-200/50 p-4 lg:p-8 rounded-xl border-2 border-dashed border-gray-300 print:border-none print:p-0 print:bg-white print:block print:w-full print:h-full print:overflow-visible">
+        <div className="flex-1 min-h-0 flex justify-center items-start overflow-auto bg-gray-200/50 p-4 lg:p-6 rounded-xl border-2 border-dashed border-gray-300 print:border-none print:p-0 print:bg-white print:block print:w-full print:h-full print:overflow-visible">
            <Worksheet columnsData={columnsData} />
         </div>
       </main>
       
       {/* Footer - Hidden on Print */}
-      <footer className="bg-white border-t border-gray-200 py-6 text-center text-sm text-gray-500 no-print">
+      <footer className="flex-shrink-0 bg-white border-t border-gray-200 py-3 text-center text-sm text-gray-500 no-print">
         <p>&copy; {new Date().getFullYear()} Wojciech Gołowkow.</p>
       </footer>
     </div>

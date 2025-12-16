@@ -33,14 +33,14 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6 h-fit sticky top-6">
-      <div className="flex items-center gap-2 border-b border-gray-100 pb-4">
-        <Settings className="w-5 h-5 text-indigo-600" />
-        <h2 className="text-lg font-semibold text-gray-800">Ustawienia</h2>
+    <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-4">
+      <div className="flex items-center gap-2 border-b border-gray-100 pb-3">
+        <Settings className="w-4 h-4 text-indigo-600" />
+        <h2 className="text-base font-semibold text-gray-800">Ustawienia</h2>
       </div>
 
       {/* Columns Selection */}
-      <div className="space-y-3">
+      <div className="space-y-1">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
             <Columns className="w-4 h-4" />
             Liczba kolumn
@@ -55,108 +55,95 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           onChange={(e) => handleColumnsChange(parseInt(e.target.value))}
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
         />
-        <div className="flex justify-between text-xs text-gray-400 px-1">
-          <span>2</span>
-          <span>3</span>
-          <span>4</span>
-          <span>5</span>
-          <span>6</span>
-          <span>7</span>
-          <span>8</span>
-        </div>
       </div>
 
       {/* Problem Count */}
-      <div className="space-y-3">
+      <div className="space-y-1">
         <label className="text-sm font-medium text-gray-700 flex justify-between">
           Liczba działań na kolumnę
           <span className="text-indigo-600 font-bold">{settings.problemCount}</span>
         </label>
-        <div className="flex flex-col gap-1">
-            <input
-            type="range"
-            min="10"
-            max="50"
-            step="1"
-            value={settings.problemCount}
-            onChange={(e) => handleChange('problemCount', parseInt(e.target.value))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
-            />
-            <span className="text-xs text-gray-400">Rozmiar czcionki dopasuje się automatycznie.</span>
-        </div>
+        <input
+          type="range"
+          min="10"
+          max="50"
+          step="1"
+          value={settings.problemCount}
+          onChange={(e) => handleChange('problemCount', parseInt(e.target.value))}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+        />
       </div>
 
       {/* Range Settings */}
-      <div className="space-y-3">
+      <div className="space-y-1">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
             <Hash className="w-4 h-4" />
-            Zakres wyników (np. 1-100)
+            Zakres wyników
         </label>
         <div className="flex items-center gap-2">
             <div className="flex-1">
-                <label className="text-xs text-gray-500 mb-1 block">Od</label>
                 <input 
                     type="number" 
                     value={settings.minResult}
                     onChange={(e) => handleChange('minResult', Math.max(1, parseInt(e.target.value) || 0))}
-                    className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                    className="w-full p-1.5 border border-gray-300 rounded-lg text-sm"
+                    placeholder="Od"
                 />
             </div>
+            <span className="text-gray-400">–</span>
             <div className="flex-1">
-                <label className="text-xs text-gray-500 mb-1 block">Do</label>
                 <input 
                     type="number" 
                     value={settings.maxResult}
                     onChange={(e) => handleChange('maxResult', Math.max(settings.minResult, parseInt(e.target.value) || 0))}
-                    className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                    className="w-full p-1.5 border border-gray-300 rounded-lg text-sm"
+                    placeholder="Do"
                 />
             </div>
         </div>
       </div>
 
       {/* Factor Range */}
-      <div className="space-y-3">
+      <div className="space-y-1">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
             <X className="w-4 h-4" />
-            Zakres czynników/dzielników
+            Zakres czynników
         </label>
         <div className="flex items-center gap-2">
             <div className="flex-1">
-                <label className="text-xs text-gray-500 mb-1 block">Od</label>
                 <input 
                     type="number" 
                     value={settings.minFactor}
                     onChange={(e) => handleChange('minFactor', Math.max(2, Math.min(settings.maxFactor, parseInt(e.target.value) || 2)))}
-                    className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                    className="w-full p-1.5 border border-gray-300 rounded-lg text-sm"
+                    placeholder="Od"
                 />
             </div>
+            <span className="text-gray-400">–</span>
             <div className="flex-1">
-                <label className="text-xs text-gray-500 mb-1 block">Do</label>
                 <input 
                     type="number" 
                     value={settings.maxFactor}
                     onChange={(e) => handleChange('maxFactor', Math.max(settings.minFactor, parseInt(e.target.value) || 2))}
-                    className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                    className="w-full p-1.5 border border-gray-300 rounded-lg text-sm"
+                    placeholder="Do"
                 />
             </div>
         </div>
-        <p className="text-xs text-gray-500">
-           Np. 2-10 da działania typu 5•7, a 5-12 da 8•11.
-        </p>
       </div>
 
       {/* Copies */}
-      <div className="space-y-3">
+      <div className="space-y-1">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
           <Copy className="w-4 h-4" />
-          Liczba identycznych kopii
+          Identyczne kopie
         </label>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-1.5 flex-wrap">
           {Array.from({length: settings.columns}, (_, i) => i + 1).map((num) => (
             <button
               key={num}
               onClick={() => handleChange('copies', num)}
-              className={`flex-1 min-w-[2.5rem] py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 min-w-[2rem] py-1.5 text-sm font-medium rounded-md transition-colors ${
                 settings.copies === num
                   ? 'bg-indigo-600 text-white shadow-md'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -169,10 +156,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       </div>
 
       {/* Toggles */}
-      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
+      <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-100">
         <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
           <Divide className="w-4 h-4" />
-          Uwzględnij dzielenie
+          Dzielenie
         </div>
         <label className="relative inline-flex items-center cursor-pointer">
           <input
@@ -181,21 +168,21 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
             onChange={(e) => handleChange('allowDivision', e.target.checked)}
             className="sr-only peer"
           />
-          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+          <div className="w-10 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
         </label>
       </div>
 
-      <div className="pt-4 border-t border-gray-100 flex flex-col gap-3">
+      <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">
         <button
           onClick={onGenerate}
-          className="w-full flex items-center justify-center gap-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 py-3 rounded-lg font-medium transition-colors"
+          className="w-full flex items-center justify-center gap-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 py-2 rounded-lg font-medium transition-colors text-sm"
         >
           <RefreshCw className="w-4 h-4" />
           Generuj nowy zestaw
         </button>
         <button
           onClick={onPrint}
-          className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700 py-3 rounded-lg font-medium shadow-md transition-all hover:shadow-lg"
+          className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700 py-2 rounded-lg font-medium shadow-md transition-all hover:shadow-lg text-sm"
         >
           <Printer className="w-4 h-4" />
           Drukuj arkusz
