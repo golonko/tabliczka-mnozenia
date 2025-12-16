@@ -10,10 +10,19 @@ const Worksheet: React.FC<WorksheetProps> = ({ columnsData }) => {
   const problemCount = columnsData[0]?.length || 0;
   const columnCount = columnsData.length;
 
-  // Calculate font size as percentage of container height divided by problem count
-  // Using cqh (container query height) units for automatic scaling
-  // The 75 factor gives good visual balance - roughly 75% of available row height
-  const fontSize = `calc(75cqh / ${problemCount})`;
+  // Calculate font size using BOTH vertical and horizontal constraints
+  // Using container query units (cqh/cqw) for automatic scaling
+  
+  // Vertical: 75% of container height divided by problem count
+  const verticalFontSize = `calc(75cqh / ${problemCount})`;
+  
+  // Horizontal: ~4% of container width ensures enough room for:
+  // - problem number (3 chars) + equation (12 chars) + answer space (5+ chars)
+  // Monospace chars are ~0.6× font-size wide, so 4cqw → fits ~40 chars
+  const horizontalFontSize = `8cqw`;
+  
+  // Use the SMALLER of vertical/horizontal to prevent overflow in either direction
+  const fontSize = `min(${verticalFontSize}, ${horizontalFontSize})`;
   
   // Clamp the font size to reasonable bounds for readability
   const clampedFontSize = `clamp(9px, ${fontSize}, 28px)`;
@@ -49,7 +58,7 @@ const Worksheet: React.FC<WorksheetProps> = ({ columnsData }) => {
                   {problems.map((problem, index) => (
                     <div
                       key={`${colIndex}-${problem.id}`}
-                      className="flex items-center min-h-0"
+                      className="flex items-center min-h-0 overflow-hidden"
                       style={{ 
                         fontSize: clampedFontSize,
                       }}
