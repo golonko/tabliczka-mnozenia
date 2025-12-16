@@ -1,6 +1,6 @@
 import React from 'react';
 import { GeneratorSettings } from '../types';
-import { Settings, Printer, RefreshCw, Divide, Copy, Hash, X, RectangleVertical, RectangleHorizontal } from 'lucide-react';
+import { Settings, Printer, RefreshCw, Divide, Copy, Hash, X, Columns } from 'lucide-react';
 
 interface SettingsPanelProps {
   settings: GeneratorSettings;
@@ -22,19 +22,15 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
     onSettingsChange({ ...settings, [key]: value });
   };
 
-  const handleLayoutChange = (layout: 'portrait' | 'landscape') => {
-    // When switching layouts, ensure copies doesn't exceed new max
-    const maxCopies = layout === 'landscape' ? 4 : 3;
-    const newCopies = Math.min(settings.copies, maxCopies);
-    
+  const handleColumnsChange = (columns: number) => {
+    // When changing columns, ensure copies doesn't exceed columns count
+    const newCopies = Math.min(settings.copies, columns);
     onSettingsChange({ 
         ...settings, 
-        layout, 
+        columns, 
         copies: newCopies 
     });
   };
-
-  const maxCopiesAvailable = settings.layout === 'landscape' ? 4 : 3;
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6 h-fit sticky top-6">
@@ -43,36 +39,30 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
         <h2 className="text-lg font-semibold text-gray-800">Ustawienia</h2>
       </div>
 
-      {/* Layout Selection */}
+      {/* Columns Selection */}
       <div className="space-y-3">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-            Orientacja wydruku
+            <Columns className="w-4 h-4" />
+            Liczba kolumn
+            <span className="ml-auto text-indigo-600 font-bold">{settings.columns}</span>
         </label>
-        <div className="flex gap-2">
-            <button
-                onClick={() => handleLayoutChange('portrait')}
-                className={`flex-1 flex flex-col items-center justify-center p-3 rounded-lg border-2 transition-all ${
-                    settings.layout === 'portrait' 
-                    ? 'border-indigo-600 bg-indigo-50 text-indigo-700' 
-                    : 'border-gray-200 hover:border-gray-300 text-gray-500'
-                }`}
-            >
-                <RectangleVertical className="w-6 h-6 mb-1" />
-                <span className="text-xs font-medium">Pionowo</span>
-                <span className="text-[10px] opacity-75">(3 kolumny)</span>
-            </button>
-            <button
-                onClick={() => handleLayoutChange('landscape')}
-                className={`flex-1 flex flex-col items-center justify-center p-3 rounded-lg border-2 transition-all ${
-                    settings.layout === 'landscape' 
-                    ? 'border-indigo-600 bg-indigo-50 text-indigo-700' 
-                    : 'border-gray-200 hover:border-gray-300 text-gray-500'
-                }`}
-            >
-                <RectangleHorizontal className="w-6 h-6 mb-1" />
-                <span className="text-xs font-medium">Poziomo</span>
-                <span className="text-[10px] opacity-75">(4 kolumny)</span>
-            </button>
+        <input
+          type="range"
+          min="2"
+          max="8"
+          step="1"
+          value={settings.columns}
+          onChange={(e) => handleColumnsChange(parseInt(e.target.value))}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+        />
+        <div className="flex justify-between text-xs text-gray-400 px-1">
+          <span>2</span>
+          <span>3</span>
+          <span>4</span>
+          <span>5</span>
+          <span>6</span>
+          <span>7</span>
+          <span>8</span>
         </div>
       </div>
 
@@ -148,12 +138,12 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           <Copy className="w-4 h-4" />
           Liczba identycznych kopii
         </label>
-        <div className="flex gap-2">
-          {Array.from({length: maxCopiesAvailable}, (_, i) => i + 1).map((num) => (
+        <div className="flex gap-2 flex-wrap">
+          {Array.from({length: settings.columns}, (_, i) => i + 1).map((num) => (
             <button
               key={num}
               onClick={() => handleChange('copies', num)}
-              className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 min-w-[2.5rem] py-2 text-sm font-medium rounded-md transition-colors ${
                 settings.copies === num
                   ? 'bg-indigo-600 text-white shadow-md'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'

@@ -8,10 +8,10 @@ export interface MathProblem {
 
 export interface GeneratorSettings {
   problemCount: number;
+  columns: number; // Number of columns (2-8)
   copies: number; // Number of identical copies
   allowDivision: boolean;
   minResult: number;
   maxResult: number;
   maxFactor: number; // Maximum value for operands/divisors
-  layout: 'portrait' | 'landscape'; // New layout setting
 }

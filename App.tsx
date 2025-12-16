@@ -7,45 +7,22 @@ import { generateProblems } from './services/mathGenerator';
 const App: React.FC = () => {
   const [settings, setSettings] = useState<GeneratorSettings>({
     problemCount: 20,
+    columns: 4,
     copies: 4, 
     allowDivision: true,
     minResult: 2,
     maxResult: 100,
     maxFactor: 10,
-    layout: 'landscape', // Default
   });
 
   const [columnsData, setColumnsData] = useState<MathProblem[][]>([]);
 
-  // Inject print styles based on layout preference
-  // @page rules must be at top level, NOT inside @media print
-  useEffect(() => {
-    const styleId = 'print-layout-style';
-    let styleEl = document.getElementById(styleId) as HTMLStyleElement;
-    if (!styleEl) {
-      styleEl = document.createElement('style');
-      styleEl.id = styleId;
-      document.head.appendChild(styleEl);
-    }
-    
-    // @page rule sets print orientation and margins
-    // Small margin (5mm) ensures content doesn't hit unprintable areas
-    styleEl.innerHTML = `
-      @page { 
-        size: A4 ${settings.layout}; 
-        margin: 5mm;
-      }
-    `;
-  }, [settings.layout]);
-
   const generate = useCallback(() => {
-    // 3 columns for Portrait, 4 for Landscape
-    const COLUMNS_ON_PAGE = settings.layout === 'landscape' ? 4 : 3;
     const newColumns: MathProblem[][] = [];
 
     // Generate sets in groups of 'copies'
     // Each group will have 'copies' number of identical columns
-    for (let i = 0; i < COLUMNS_ON_PAGE; i += settings.copies) {
+    for (let i = 0; i < settings.columns; i += settings.copies) {
       // Generate one set for this group
       const groupSet = generateProblems(
         settings.problemCount, 
@@ -56,7 +33,7 @@ const App: React.FC = () => {
       );
       
       // Fill the columns in this group with the same set
-      const remainingColumns = COLUMNS_ON_PAGE - i;
+      const remainingColumns = settings.columns - i;
       const columnsInThisGroup = Math.min(settings.copies, remainingColumns);
       
       for (let j = 0; j < columnsInThisGroup; j++) {
@@ -82,12 +59,12 @@ const App: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     settings.problemCount,
+    settings.columns,
     settings.copies,
     settings.allowDivision,
     settings.minResult,
     settings.maxResult,
-    settings.maxFactor,
-    settings.layout
+    settings.maxFactor
   ]); 
 
   const handlePrint = () => {
@@ -117,7 +94,7 @@ const App: React.FC = () => {
 
         {/* Printable Area Wrapper */}
         <div className="flex-1 flex justify-center items-start overflow-auto bg-gray-200/50 p-4 lg:p-8 rounded-xl border-2 border-dashed border-gray-300 print:border-none print:p-0 print:bg-white print:block print:w-full print:h-full print:overflow-visible">
-           <Worksheet columnsData={columnsData} layout={settings.layout} />
+           <Worksheet columnsData={columnsData} />
         </div>
       </main>
       

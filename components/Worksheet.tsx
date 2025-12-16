@@ -1,21 +1,14 @@
 import React from 'react';
-import { MathProblem, GeneratorSettings } from '../types';
+import { MathProblem } from '../types';
 import { Scissors } from 'lucide-react';
 
 interface WorksheetProps {
   columnsData: MathProblem[][];
-  layout: GeneratorSettings['layout'];
 }
 
-const Worksheet: React.FC<WorksheetProps> = ({ columnsData, layout }) => {
+const Worksheet: React.FC<WorksheetProps> = ({ columnsData }) => {
   const problemCount = columnsData[0]?.length || 0;
-  const isLandscape = layout === 'landscape';
-
-  // A4 Dimensions: Portrait 210mm x 297mm, Landscape 297mm x 210mm
-  // Screen shows A4 preview, print uses 100% of available page (constrained by @page)
-  const containerClass = isLandscape
-    ? "w-full max-w-[297mm] h-[210mm] print:w-full print:h-full print:max-w-none print:max-h-none"
-    : "w-full max-w-[210mm] h-[297mm] print:w-full print:h-full print:max-w-none print:max-h-none";
+  const columnCount = columnsData.length;
 
   // Calculate font size as percentage of container height divided by problem count
   // Using cqh (container query height) units for automatic scaling
@@ -27,12 +20,12 @@ const Worksheet: React.FC<WorksheetProps> = ({ columnsData, layout }) => {
 
   return (
     <div 
-      className={`bg-white shadow-2xl print:shadow-none mx-auto p-4 print:p-0 relative flex flex-col ${containerClass}`}
+      className="bg-white shadow-2xl print:shadow-none mx-auto p-4 print:p-0 relative flex flex-col w-full h-[90vh] print:w-full print:h-full print:max-w-none print:max-h-none"
       style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}
     >
       {/* Visual aid for screen only */}
       <div className="absolute top-0 right-0 p-2 bg-yellow-100 text-yellow-800 text-xs rounded-bl-lg print:hidden font-medium z-10">
-        Podgląd A4 ({isLandscape ? 'Poziomo' : 'Pionowo'})
+        Podgląd ({columnCount} kolumn)
       </div>
 
       <div className="flex-1 flex w-full min-h-0 overflow-hidden">
