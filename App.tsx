@@ -18,6 +18,7 @@ const App: React.FC = () => {
   const [columnsData, setColumnsData] = useState<MathProblem[][]>([]);
 
   // Inject print styles based on layout preference
+  // @page rules must be at top level, NOT inside @media print
   useEffect(() => {
     const styleId = 'print-layout-style';
     let styleEl = document.getElementById(styleId) as HTMLStyleElement;
@@ -27,14 +28,12 @@ const App: React.FC = () => {
       document.head.appendChild(styleEl);
     }
     
-    // We set specific margin to 0 to maximize paper usage, 
-    // letting the Worksheet container define the boundaries.
+    // @page rule sets print orientation and margins
+    // Small margin (5mm) ensures content doesn't hit unprintable areas
     styleEl.innerHTML = `
-      @media print { 
-        @page { 
-          size: A4 ${settings.layout}; 
-          margin: 0;
-        } 
+      @page { 
+        size: A4 ${settings.layout}; 
+        margin: 5mm;
       }
     `;
   }, [settings.layout]);
@@ -96,11 +95,11 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-50 print:min-h-full print:h-full print:block">
       {/* Header removed as requested */}
 
       {/* Main Content */}
-      <main className="flex-1 max-w-screen-2xl mx-auto w-full p-4 sm:p-6 flex flex-col lg:flex-row gap-6">
+      <main className="flex-1 max-w-screen-2xl mx-auto w-full p-4 sm:p-6 flex flex-col lg:flex-row gap-6 print:max-w-none print:p-0 print:m-0 print:block print:h-full">
         
         {/* Sidebar Controls - Hidden on Print */}
         <aside className="w-full lg:w-80 flex-shrink-0 no-print">
@@ -117,7 +116,7 @@ const App: React.FC = () => {
         </aside>
 
         {/* Printable Area Wrapper */}
-        <div className="flex-1 flex justify-center items-start overflow-auto bg-gray-200/50 p-4 lg:p-8 rounded-xl border-2 border-dashed border-gray-300 print:border-none print:p-0 print:bg-white print:block">
+        <div className="flex-1 flex justify-center items-start overflow-auto bg-gray-200/50 p-4 lg:p-8 rounded-xl border-2 border-dashed border-gray-300 print:border-none print:p-0 print:bg-white print:block print:w-full print:h-full print:overflow-visible">
            <Worksheet columnsData={columnsData} layout={settings.layout} />
         </div>
       </main>

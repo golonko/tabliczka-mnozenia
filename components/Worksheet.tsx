@@ -12,9 +12,10 @@ const Worksheet: React.FC<WorksheetProps> = ({ columnsData, layout }) => {
   const isLandscape = layout === 'landscape';
 
   // A4 Dimensions: Portrait 210mm x 297mm, Landscape 297mm x 210mm
+  // Screen shows A4 preview, print uses 100% of available page (constrained by @page)
   const containerClass = isLandscape
-    ? "w-full max-w-[297mm] h-[210mm]"
-    : "w-full max-w-[210mm] h-[297mm]";
+    ? "w-full max-w-[297mm] h-[210mm] print:w-full print:h-full print:max-w-none print:max-h-none"
+    : "w-full max-w-[210mm] h-[297mm] print:w-full print:h-full print:max-w-none print:max-h-none";
 
   // Calculate font size as percentage of container height divided by problem count
   // Using cqh (container query height) units for automatic scaling
@@ -25,7 +26,10 @@ const Worksheet: React.FC<WorksheetProps> = ({ columnsData, layout }) => {
   const clampedFontSize = `clamp(9px, ${fontSize}, 28px)`;
 
   return (
-    <div className={`bg-white shadow-2xl print:shadow-none mx-auto p-4 print:p-2 relative flex flex-col ${containerClass}`}>
+    <div 
+      className={`bg-white shadow-2xl print:shadow-none mx-auto p-4 print:p-0 relative flex flex-col ${containerClass}`}
+      style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}
+    >
       {/* Visual aid for screen only */}
       <div className="absolute top-0 right-0 p-2 bg-yellow-100 text-yellow-800 text-xs rounded-bl-lg print:hidden font-medium z-10">
         Podgląd A4 ({isLandscape ? 'Poziomo' : 'Pionowo'})
