@@ -1,2 +1,7 @@
-# tabliczka-mnozenia
-generator zadań z tabliczki mnożenia
+# Tabliczka Mnożenia
+Generator zadań z tabliczki mnożenia
+
+Prerequisites: Node.js
+
+Install dependencies: npm install
+Run the app: npm run dev
