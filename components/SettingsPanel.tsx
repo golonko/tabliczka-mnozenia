@@ -172,6 +172,25 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
         </label>
       </div>
 
+      {/* Page Count */}
+      <div className="space-y-1">
+        <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+          <FileStack className="w-4 h-4" />
+          Liczba stron do wydruku
+          <span className="ml-auto text-indigo-600 font-bold">{settings.pageCount}</span>
+        </label>
+        <input
+          type="range"
+          min="1"
+          max="10"
+          step="1"
+          value={settings.pageCount}
+          onChange={(e) => handleChange('pageCount', parseInt(e.target.value))}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+        />
+        <p className="text-xs text-gray-500">Każda strona będzie miała inne działania</p>
+      </div>
+
       <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">
         <button
           onClick={onGenerate}
@@ -180,30 +199,13 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           <RefreshCw className="w-4 h-4" />
           Generuj nowy zestaw
         </button>
-        
-        {/* Print row with page count */}
-        <div className="flex gap-2 items-stretch">
-          <div className="flex items-center gap-1.5 bg-gray-100 rounded-lg px-2">
-            <FileStack className="w-4 h-4 text-gray-500" />
-            <input
-              type="number"
-              min="1"
-              max="20"
-              value={settings.pageCount}
-              onChange={(e) => handleChange('pageCount', Math.max(1, Math.min(20, parseInt(e.target.value) || 1)))}
-              className="w-12 py-2 bg-transparent text-center font-bold text-indigo-600 text-sm focus:outline-none"
-            />
-            <span className="text-xs text-gray-500">str.</span>
-          </div>
-          <button
-            onClick={onPrint}
-            className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700 py-2 rounded-lg font-medium shadow-md transition-all hover:shadow-lg text-sm"
-          >
-            <Printer className="w-4 h-4" />
-            Print
-          </button>
-        </div>
-        <p className="text-xs text-gray-500 text-center">Każda strona będzie miała inne działania</p>
+        <button
+          onClick={onPrint}
+          className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700 py-2 rounded-lg font-medium shadow-md transition-all hover:shadow-lg text-sm"
+        >
+          <Printer className="w-4 h-4" />
+          Drukuj arkusz
+        </button>
       </div>
     </div>
   );
