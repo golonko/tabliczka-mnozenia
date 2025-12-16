@@ -107,6 +107,7 @@ const App: React.FC = () => {
         <InteractiveExercise
           settings={settings}
           language={language}
+          onLanguageChange={setLanguage}
           onBackToGenerator={handleBackToGenerator}
         />
         <Analytics />

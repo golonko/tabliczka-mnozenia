@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { MathProblem, GeneratorSettings } from '../types';
 import { Language, translations } from '../locales';
 import { generateProblems } from '../services/mathGenerator';
@@ -7,6 +7,7 @@ import { Check, RotateCcw, Home } from 'lucide-react';
 interface InteractiveExerciseProps {
   settings: GeneratorSettings;
   language: Language;
+  onLanguageChange: (lang: Language) => void;
   onBackToGenerator: () => void;
 }
 
@@ -20,12 +21,14 @@ interface ProblemAnswer {
 const InteractiveExercise: React.FC<InteractiveExerciseProps> = ({
   settings,
   language,
+  onLanguageChange,
   onBackToGenerator,
 }) => {
   const t = translations[language];
   const [problems, setProblems] = useState<MathProblem[]>([]);
   const [answers, setAnswers] = useState<ProblemAnswer[]>([]);
   const [hasChecked, setHasChecked] = useState(false);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   // Initialize problems on mount
   React.useEffect(() => {
@@ -69,6 +72,8 @@ const InteractiveExercise: React.FC<InteractiveExerciseProps> = ({
       expectedAnswer: calculateExpectedAnswer(problem)
     })));
     setHasChecked(false);
+    // Reset input refs for new problems
+    inputRefs.current = new Array(newProblems.length).fill(null);
   }, [settings]);
 
   const handleAnswerChange = (problemId: string, value: string) => {
@@ -77,6 +82,16 @@ const InteractiveExercise: React.FC<InteractiveExerciseProps> = ({
         ? { ...ans, answer: value }
         : ans
     ));
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const nextIndex = index + 1;
+      if (nextIndex < inputRefs.current.length && inputRefs.current[nextIndex]) {
+        inputRefs.current[nextIndex]?.focus();
+      }
+    }
   };
 
   const checkAnswers = () => {
@@ -92,19 +107,37 @@ const InteractiveExercise: React.FC<InteractiveExerciseProps> = ({
   const totalCount = answers.length;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-6">
+    <div className="h-screen bg-gray-50 overflow-y-auto py-6">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-2xl font-bold text-gray-800">{t.interactiveExercise}</h1>
-            <button
-              onClick={onBackToGenerator}
-              className="flex items-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-lg font-medium transition-colors"
-            >
-              <Home className="w-4 h-4" />
-              {t.backToGenerator}
-            </button>
+            <div className="flex items-center gap-3">
+              <div className="flex gap-1">
+                <button
+                  onClick={() => onLanguageChange('pl')}
+                  className={`text-base leading-none transition-opacity ${language === 'pl' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+                  title="Polski"
+                >
+                  🇵🇱
+                </button>
+                <button
+                  onClick={() => onLanguageChange('en')}
+                  className={`text-base leading-none transition-opacity ${language === 'en' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+                  title="English"
+                >
+                  🇬🇧
+                </button>
+              </div>
+              <button
+                onClick={onBackToGenerator}
+                className="flex items-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-lg font-medium transition-colors"
+              >
+                <Home className="w-4 h-4" />
+                {t.backToGenerator}
+              </button>
+            </div>
           </div>
 
           {/* Summary */}
@@ -163,9 +196,11 @@ const InteractiveExercise: React.FC<InteractiveExerciseProps> = ({
                     </span>
                   </div>
                   <input
+                    ref={(el) => (inputRefs.current[index] = el)}
                     type="number"
                     value={answer?.answer || ''}
                     onChange={(e) => handleAnswerChange(problem.id, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(e, index)}
                     className={`w-full p-2 border rounded-lg text-center font-medium ${
                       isIncorrect
                         ? 'border-red-300 bg-red-100 text-red-800'
