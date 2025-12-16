@@ -14,36 +14,45 @@ const App: React.FC = () => {
     maxResult: 100,
     minFactor: 1,
     maxFactor: 10,
+    pageCount: 1,
   });
 
-  const [columnsData, setColumnsData] = useState<MathProblem[][]>([]);
+  // Each page has its own array of columns (MathProblem[][])
+  const [pagesData, setPagesData] = useState<MathProblem[][][]>([]);
 
   const generate = useCallback(() => {
-    const newColumns: MathProblem[][] = [];
+    const newPages: MathProblem[][][] = [];
 
-    // Generate sets in groups of 'copies'
-    // Each group will have 'copies' number of identical columns
-    for (let i = 0; i < settings.columns; i += settings.copies) {
-      // Generate one set for this group
-      const groupSet = generateProblems(
-        settings.problemCount, 
-        settings.allowDivision,
-        settings.minResult,
-        settings.maxResult,
-        settings.minFactor,
-        settings.maxFactor
-      );
-      
-      // Fill the columns in this group with the same set
-      const remainingColumns = settings.columns - i;
-      const columnsInThisGroup = Math.min(settings.copies, remainingColumns);
-      
-      for (let j = 0; j < columnsInThisGroup; j++) {
-        newColumns.push(groupSet);
+    // Generate data for each page
+    for (let pageIndex = 0; pageIndex < settings.pageCount; pageIndex++) {
+      const pageColumns: MathProblem[][] = [];
+
+      // Generate sets in groups of 'copies'
+      // Each group will have 'copies' number of identical columns
+      for (let i = 0; i < settings.columns; i += settings.copies) {
+        // Generate one set for this group
+        const groupSet = generateProblems(
+          settings.problemCount, 
+          settings.allowDivision,
+          settings.minResult,
+          settings.maxResult,
+          settings.minFactor,
+          settings.maxFactor
+        );
+        
+        // Fill the columns in this group with the same set
+        const remainingColumns = settings.columns - i;
+        const columnsInThisGroup = Math.min(settings.copies, remainingColumns);
+        
+        for (let j = 0; j < columnsInThisGroup; j++) {
+          pageColumns.push(groupSet);
+        }
       }
+
+      newPages.push(pageColumns);
     }
 
-    setColumnsData(newColumns);
+    setPagesData(newPages);
   }, [settings]);
 
   // Generate initial problems on mount
@@ -55,7 +64,7 @@ const App: React.FC = () => {
   // Auto-generate problems when any relevant setting changes
   useEffect(() => {
     // Skip initial mount (already handled above)
-    if (columnsData.length > 0) {
+    if (pagesData.length > 0) {
       generate();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,7 +76,8 @@ const App: React.FC = () => {
     settings.minResult,
     settings.maxResult,
     settings.minFactor,
-    settings.maxFactor
+    settings.maxFactor,
+    settings.pageCount
   ]); 
 
   const handlePrint = () => {
@@ -97,7 +107,7 @@ const App: React.FC = () => {
 
         {/* Printable Area Wrapper */}
         <div className="flex-1 min-h-0 flex justify-center items-start overflow-auto bg-gray-200/50 p-4 lg:p-6 rounded-xl border-2 border-dashed border-gray-300 print:border-none print:p-0 print:bg-white print:block print:w-full print:h-full print:overflow-visible">
-           <Worksheet columnsData={columnsData} />
+           <Worksheet pagesData={pagesData} />
         </div>
       </main>
       

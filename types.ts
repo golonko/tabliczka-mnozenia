@@ -15,4 +15,5 @@ export interface GeneratorSettings {
   maxResult: number;
   minFactor: number; // Minimum value for operands/divisors
   maxFactor: number; // Maximum value for operands/divisors
+  pageCount: number; // Number of pages to print (each with different problems)
 }
