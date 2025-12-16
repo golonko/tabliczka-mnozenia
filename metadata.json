@@ -1,5 +1,5 @@
 {
-  "name": "Generator Tabliczki Mnożenia",
+  "name": "Generator Zadań z Tabliczki Mnożenia",
   "description": "Narzędzie do generowania i drukowania codziennych zestawów ćwiczeń z matematyki (mnożenie i dzielenie) dla dzieci.",
   "requestFramePermissions": []
 }
