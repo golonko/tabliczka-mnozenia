@@ -103,7 +103,7 @@ const App: React.FC = () => {
       
       {/* Footer - Hidden on Print */}
       <footer className="bg-white border-t border-gray-200 py-6 text-center text-sm text-gray-500 no-print">
-        <p>&copy; {new Date().getFullYear()} Generator Matematyczny.</p>
+        <p>&copy; {new Date().getFullYear()} Wojciech Gołowkow.</p>
       </footer>
     </div>
   );
