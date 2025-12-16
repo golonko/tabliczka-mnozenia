@@ -8,11 +8,11 @@ const App: React.FC = () => {
   const [settings, setSettings] = useState<GeneratorSettings>({
     problemCount: 20,
     columns: 4,
-    copies: 4, 
+    copies: 2, 
     allowDivision: true,
-    minResult: 2,
+    minResult: 1,
     maxResult: 100,
-    minFactor: 2,
+    minFactor: 1,
     maxFactor: 10,
   });
 

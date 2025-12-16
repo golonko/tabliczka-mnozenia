@@ -56,6 +56,29 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
         />
       </div>
+      
+      {/* Copies */}
+      <div className="space-y-1">
+        <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+          <Copy className="w-4 h-4" />
+          Identyczne kopie
+        </label>
+        <div className="flex gap-1.5 flex-wrap">
+          {Array.from({length: settings.columns}, (_, i) => i + 1).map((num) => (
+            <button
+              key={num}
+              onClick={() => handleChange('copies', num)}
+              className={`flex-1 min-w-[2rem] py-1.5 text-sm font-medium rounded-md transition-colors ${
+                settings.copies === num
+                  ? 'bg-indigo-600 text-white shadow-md'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              {num}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* Problem Count */}
       <div className="space-y-1">
@@ -129,29 +152,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     placeholder="Do"
                 />
             </div>
-        </div>
-      </div>
-
-      {/* Copies */}
-      <div className="space-y-1">
-        <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-          <Copy className="w-4 h-4" />
-          Identyczne kopie
-        </label>
-        <div className="flex gap-1.5 flex-wrap">
-          {Array.from({length: settings.columns}, (_, i) => i + 1).map((num) => (
-            <button
-              key={num}
-              onClick={() => handleChange('copies', num)}
-              className={`flex-1 min-w-[2rem] py-1.5 text-sm font-medium rounded-md transition-colors ${
-                settings.copies === num
-                  ? 'bg-indigo-600 text-white shadow-md'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              {num}
-            </button>
-          ))}
         </div>
       </div>
 
