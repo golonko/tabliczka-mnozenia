@@ -1,8 +1,10 @@
+export type Operation = 'multiply' | 'divide' | 'add' | 'subtract';
+
 export interface MathProblem {
   id: string;
   operandA: number;
   operandB: number;
-  operation: 'multiply' | 'divide';
+  operation: Operation;
   display: string;
 }
 
@@ -10,7 +12,10 @@ export interface GeneratorSettings {
   problemCount: number;
   columns: number; // Number of columns (2-8)
   copies: number; // Number of identical copies
+  allowMultiplication: boolean;
   allowDivision: boolean;
+  allowAddition: boolean;
+  allowSubtraction: boolean;
   minResult: number;
   maxResult: number;
   minFactor: number; // Minimum value for operands/divisors

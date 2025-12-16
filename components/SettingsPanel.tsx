@@ -1,6 +1,6 @@
 import React from 'react';
 import { GeneratorSettings } from '../types';
-import { Settings, Printer, RefreshCw, Divide, Copy, Hash, X, Columns, FileStack } from 'lucide-react';
+import { Settings, Printer, RefreshCw, Divide, Copy, Hash, X, Columns, FileStack, Plus, Minus } from 'lucide-react';
 import { Language, Translations } from '../locales';
 
 interface SettingsPanelProps {
@@ -178,21 +178,78 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
         </div>
       </div>
 
-      {/* Toggles */}
-      <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-100">
-        <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
-          <Divide className="w-4 h-4" />
-          {t.division}
+      {/* Operations */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-gray-700">{t.operations}</label>
+        <div className="grid grid-cols-2 gap-2">
+          {/* Multiplication */}
+          <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-100">
+            <div className="flex items-center gap-1.5 text-xs font-medium text-gray-700">
+              <X className="w-3.5 h-3.5" />
+              {t.multiplication}
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.allowMultiplication}
+                onChange={(e) => handleChange('allowMultiplication', e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-8 h-4 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600"></div>
+            </label>
+          </div>
+          
+          {/* Division */}
+          <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-100">
+            <div className="flex items-center gap-1.5 text-xs font-medium text-gray-700">
+              <Divide className="w-3.5 h-3.5" />
+              {t.division}
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.allowDivision}
+                onChange={(e) => handleChange('allowDivision', e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-8 h-4 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600"></div>
+            </label>
+          </div>
+          
+          {/* Addition */}
+          <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-100">
+            <div className="flex items-center gap-1.5 text-xs font-medium text-gray-700">
+              <Plus className="w-3.5 h-3.5" />
+              {t.addition}
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.allowAddition}
+                onChange={(e) => handleChange('allowAddition', e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-8 h-4 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600"></div>
+            </label>
+          </div>
+          
+          {/* Subtraction */}
+          <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-100">
+            <div className="flex items-center gap-1.5 text-xs font-medium text-gray-700">
+              <Minus className="w-3.5 h-3.5" />
+              {t.subtraction}
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.allowSubtraction}
+                onChange={(e) => handleChange('allowSubtraction', e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-8 h-4 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600"></div>
+            </label>
+          </div>
         </div>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            checked={settings.allowDivision}
-            onChange={(e) => handleChange('allowDivision', e.target.checked)}
-            className="sr-only peer"
-          />
-          <div className="w-10 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
-        </label>
       </div>
 
       <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">

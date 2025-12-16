@@ -13,7 +13,10 @@ const App: React.FC = () => {
     problemCount: 20,
     columns: 4,
     copies: 2, 
+    allowMultiplication: true,
     allowDivision: true,
+    allowAddition: false,
+    allowSubtraction: false,
     minResult: 1,
     maxResult: 100,
     minFactor: 1,
@@ -36,8 +39,13 @@ const App: React.FC = () => {
       for (let i = 0; i < settings.columns; i += settings.copies) {
         // Generate one set for this group
         const groupSet = generateProblems(
-          settings.problemCount, 
-          settings.allowDivision,
+          settings.problemCount,
+          {
+            multiply: settings.allowMultiplication,
+            divide: settings.allowDivision,
+            add: settings.allowAddition,
+            subtract: settings.allowSubtraction,
+          },
           settings.minResult,
           settings.maxResult,
           settings.minFactor,
@@ -76,7 +84,10 @@ const App: React.FC = () => {
     settings.problemCount,
     settings.columns,
     settings.copies,
+    settings.allowMultiplication,
     settings.allowDivision,
+    settings.allowAddition,
+    settings.allowSubtraction,
     settings.minResult,
     settings.maxResult,
     settings.minFactor,
