@@ -77,7 +77,16 @@ const App: React.FC = () => {
   useEffect(() => {
     generate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
+  }, []);
+
+  // Auto-generate problems when problemCount changes
+  useEffect(() => {
+    // Skip initial mount (already handled above)
+    if (columnsData.length > 0) {
+      generate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settings.problemCount]); 
 
   const handlePrint = () => {
     window.print();
