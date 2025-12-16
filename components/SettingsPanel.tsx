@@ -1,16 +1,12 @@
 import React from 'react';
 import { GeneratorSettings } from '../types';
 import { Settings, Printer, RefreshCw, Divide, Copy, Hash, X, Columns, FileStack } from 'lucide-react';
-import { Language, Translations } from '../locales';
 
 interface SettingsPanelProps {
   settings: GeneratorSettings;
   onSettingsChange: (newSettings: GeneratorSettings) => void;
   onGenerate: () => void;
   onPrint: () => void;
-  language: Language;
-  onLanguageChange: (lang: Language) => void;
-  t: Translations;
 }
 
 const SettingsPanel: React.FC<SettingsPanelProps> = ({
@@ -18,9 +14,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onSettingsChange,
   onGenerate,
   onPrint,
-  language,
-  onLanguageChange,
-  t,
 }) => {
   const handleChange = <K extends keyof GeneratorSettings>(
     key: K,
@@ -43,30 +36,14 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
     <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-4">
       <div className="flex items-center gap-2 border-b border-gray-100 pb-3">
         <Settings className="w-4 h-4 text-indigo-600" />
-        <h2 className="text-base font-semibold text-gray-800">{t.settings}</h2>
-        <div className="ml-auto flex gap-1">
-          <button
-            onClick={() => onLanguageChange('pl')}
-            className={`text-base leading-none transition-opacity ${language === 'pl' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
-            title="Polski"
-          >
-            🇵🇱
-          </button>
-          <button
-            onClick={() => onLanguageChange('en')}
-            className={`text-base leading-none transition-opacity ${language === 'en' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
-            title="English"
-          >
-            🇬🇧
-          </button>
-        </div>
+        <h2 className="text-base font-semibold text-gray-800">Ustawienia</h2>
       </div>
 
       {/* Columns Selection */}
       <div className="space-y-1">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
             <Columns className="w-4 h-4" />
-            {t.columns}
+            Liczba kolumn
             <span className="ml-auto text-indigo-600 font-bold">{settings.columns}</span>
         </label>
         <input
@@ -84,7 +61,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       <div className="space-y-1">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
           <Copy className="w-4 h-4" />
-          {t.identicalCopies}
+          Identyczne kopie
         </label>
         <div className="flex gap-1.5 flex-wrap">
           {Array.from({length: settings.columns}, (_, i) => i + 1).map((num) => (
@@ -106,7 +83,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       {/* Problem Count */}
       <div className="space-y-1">
         <label className="text-sm font-medium text-gray-700 flex justify-between">
-          {t.problemsPerColumn}
+          Liczba działań na kolumnę
           <span className="text-indigo-600 font-bold">{settings.problemCount}</span>
         </label>
         <input
@@ -124,7 +101,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       <div className="space-y-1">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
             <Hash className="w-4 h-4" />
-            {t.resultRange}
+            Zakres wyników
         </label>
         <div className="flex items-center gap-2">
             <div className="flex-1">
@@ -153,7 +130,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       <div className="space-y-1">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
             <X className="w-4 h-4" />
-            {t.factorRange}
+            Zakres czynników
         </label>
         <div className="flex items-center gap-2">
             <div className="flex-1">
@@ -182,7 +159,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-100">
         <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
           <Divide className="w-4 h-4" />
-          {t.division}
+          Dzielenie
         </div>
         <label className="relative inline-flex items-center cursor-pointer">
           <input
@@ -201,7 +178,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           className="w-full flex items-center justify-center gap-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 py-2 rounded-lg font-medium transition-colors text-sm"
         >
           <RefreshCw className="w-4 h-4" />
-          {t.generateNew}
+          Generuj nowy zestaw
         </button>
         
         {/* Print row with page count */}
@@ -216,7 +193,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
               onChange={(e) => handleChange('pageCount', Math.max(1, Math.min(20, parseInt(e.target.value) || 1)))}
               className="w-12 py-2 bg-transparent text-center font-bold text-indigo-600 text-sm focus:outline-none"
             />
-            <span className="text-xs text-gray-500">{t.pagesAbbr}</span>
+            <span className="text-xs text-gray-500">str.</span>
           </div>
           <button
             onClick={onPrint}
@@ -226,7 +203,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
             Print
           </button>
         </div>
-        <p className="text-xs text-gray-500 text-center">{t.eachPageDifferent}</p>
+        <p className="text-xs text-gray-500 text-center">Każda strona będzie miała inne działania</p>
       </div>
     </div>
   );

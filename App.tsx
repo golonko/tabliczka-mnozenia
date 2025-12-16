@@ -3,12 +3,8 @@ import SettingsPanel from './components/SettingsPanel';
 import Worksheet from './components/Worksheet';
 import { GeneratorSettings, MathProblem } from './types';
 import { generateProblems } from './services/mathGenerator';
-import { Language, translations } from './locales';
 
 const App: React.FC = () => {
-  const [language, setLanguage] = useState<Language>('pl');
-  const t = translations[language];
-
   const [settings, setSettings] = useState<GeneratorSettings>({
     problemCount: 20,
     columns: 4,
@@ -96,8 +92,8 @@ const App: React.FC = () => {
         {/* Sidebar Controls - Hidden on Print */}
         <aside className="w-full lg:w-80 flex-shrink-0 no-print flex flex-col min-h-0 lg:max-h-full">
             <div className="flex-shrink-0 mb-2">
-               <h1 className="text-xl font-bold text-gray-800">{t.generator}</h1>
-               <p className="text-gray-500 text-xs">{t.configureAndPrint}</p>
+               <h1 className="text-xl font-bold text-gray-800">Generator</h1>
+               <p className="text-gray-500 text-xs">Skonfiguruj i wydrukuj zadania.</p>
             </div>
             <div className="flex-1 min-h-0 overflow-auto">
               <SettingsPanel
@@ -105,16 +101,13 @@ const App: React.FC = () => {
                 onSettingsChange={setSettings}
                 onGenerate={generate}
                 onPrint={handlePrint}
-                language={language}
-                onLanguageChange={setLanguage}
-                t={t}
               />
             </div>
         </aside>
 
         {/* Printable Area Wrapper */}
         <div className="flex-1 min-h-0 flex justify-center items-start overflow-auto bg-gray-200/50 p-4 lg:p-6 rounded-xl border-2 border-dashed border-gray-300 print:border-none print:p-0 print:bg-white print:block print:w-full print:h-full print:overflow-visible">
-           <Worksheet pagesData={pagesData} t={t} />
+           <Worksheet pagesData={pagesData} />
         </div>
       </main>
       

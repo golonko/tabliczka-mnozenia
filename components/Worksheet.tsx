@@ -1,11 +1,9 @@
 import React from 'react';
 import { MathProblem } from '../types';
 import { Scissors } from 'lucide-react';
-import { Translations } from '../locales';
 
 interface WorksheetProps {
   pagesData: MathProblem[][][]; // Array of pages, each page has columnsData
-  t: Translations;
 }
 
 interface SinglePageProps {
@@ -13,10 +11,9 @@ interface SinglePageProps {
   pageIndex: number;
   totalPages: number;
   isScreenPreview: boolean;
-  t: Translations;
 }
 
-const SinglePage: React.FC<SinglePageProps> = ({ columnsData, pageIndex, totalPages, isScreenPreview, t }) => {
+const SinglePage: React.FC<SinglePageProps> = ({ columnsData, pageIndex, totalPages, isScreenPreview }) => {
   const problemCount = columnsData[0]?.length || 0;
   const columnCount = columnsData.length;
 
@@ -52,7 +49,7 @@ const SinglePage: React.FC<SinglePageProps> = ({ columnsData, pageIndex, totalPa
       {/* Visual aid for screen only */}
       {isScreenPreview && (
         <div className="absolute top-0 right-0 p-2 bg-yellow-100 text-yellow-800 text-xs rounded-bl-lg font-medium z-10">
-          {t.page} {pageIndex + 1}/{totalPages} ({columnCount} {t.columnsLabel})
+          Strona {pageIndex + 1}/{totalPages} ({columnCount} kolumn)
         </div>
       )}
 
@@ -117,7 +114,7 @@ const SinglePage: React.FC<SinglePageProps> = ({ columnsData, pageIndex, totalPa
               {/* Score Box at bottom - fixed size, always visible */}
               <div className="flex-shrink-0 pt-1">
                 <div className="border-2 border-gray-800 rounded-lg p-1 flex justify-between items-center">
-                  <span className="text-[9px] font-bold uppercase">{t.score}</span>
+                  <span className="text-[9px] font-bold uppercase">Wynik:</span>
                   <span className="font-mono text-gray-300 text-[9px]">___ / {problems.length}</span>
                 </div>
               </div>
@@ -141,7 +138,7 @@ const SinglePage: React.FC<SinglePageProps> = ({ columnsData, pageIndex, totalPa
   );
 };
 
-const Worksheet: React.FC<WorksheetProps> = ({ pagesData, t }) => {
+const Worksheet: React.FC<WorksheetProps> = ({ pagesData }) => {
   if (pagesData.length === 0) return null;
 
   // Show only the first page in preview mode (screen), but all pages in print
@@ -154,7 +151,6 @@ const Worksheet: React.FC<WorksheetProps> = ({ pagesData, t }) => {
           pageIndex={0} 
           totalPages={pagesData.length} 
           isScreenPreview={true}
-          t={t}
         />
       </div>
       
@@ -167,7 +163,6 @@ const Worksheet: React.FC<WorksheetProps> = ({ pagesData, t }) => {
             pageIndex={pageIndex}
             totalPages={pagesData.length}
             isScreenPreview={false}
-            t={t}
           />
         ))}
       </div>
