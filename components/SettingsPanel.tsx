@@ -1,12 +1,15 @@
 import React from 'react';
 import { GeneratorSettings } from '../types';
-import { Settings, Printer, RefreshCw, Divide, Copy, Hash, X, Columns } from 'lucide-react';
+import { Settings, Printer, RefreshCw, Divide, Copy, Hash, X, Columns, Plus, Minus } from 'lucide-react';
+import { Language, translations } from '../locales';
 
 interface SettingsPanelProps {
   settings: GeneratorSettings;
   onSettingsChange: (newSettings: GeneratorSettings) => void;
   onGenerate: () => void;
   onPrint: () => void;
+  language: Language;
+  onLanguageChange: (lang: Language) => void;
 }
 
 const SettingsPanel: React.FC<SettingsPanelProps> = ({
@@ -14,7 +17,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onSettingsChange,
   onGenerate,
   onPrint,
+  language,
+  onLanguageChange,
 }) => {
+  const t = translations[language];
   const handleChange = <K extends keyof GeneratorSettings>(
     key: K,
     value: GeneratorSettings[K]
@@ -36,14 +42,30 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
     <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-4">
       <div className="flex items-center gap-2 border-b border-gray-100 pb-3">
         <Settings className="w-4 h-4 text-indigo-600" />
-        <h2 className="text-base font-semibold text-gray-800">Ustawienia</h2>
+        <h2 className="text-base font-semibold text-gray-800">{t.settings}</h2>
+        <div className="ml-auto flex gap-1">
+          <button
+            onClick={() => onLanguageChange('pl')}
+            className={`text-base leading-none transition-opacity ${language === 'pl' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+            title="Polski"
+          >
+            🇵🇱
+          </button>
+          <button
+            onClick={() => onLanguageChange('en')}
+            className={`text-base leading-none transition-opacity ${language === 'en' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+            title="English"
+          >
+            🇬🇧
+          </button>
+        </div>
       </div>
 
       {/* Columns Selection */}
       <div className="space-y-1">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
             <Columns className="w-4 h-4" />
-            Liczba kolumn
+            {t.columns}
             <span className="ml-auto text-indigo-600 font-bold">{settings.columns}</span>
         </label>
         <input
@@ -61,7 +83,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       <div className="space-y-1">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
           <Copy className="w-4 h-4" />
-          Identyczne kopie
+          {t.identicalCopies}
         </label>
         <div className="flex gap-1.5 flex-wrap">
           {Array.from({length: settings.columns}, (_, i) => i + 1).map((num) => (
@@ -83,7 +105,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       {/* Problem Count */}
       <div className="space-y-1">
         <label className="text-sm font-medium text-gray-700 flex justify-between">
-          Liczba działań na kolumnę
+          {t.problemsPerColumn}
           <span className="text-indigo-600 font-bold">{settings.problemCount}</span>
         </label>
         <input
@@ -101,7 +123,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       <div className="space-y-1">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
             <Hash className="w-4 h-4" />
-            Zakres wyników
+            {t.resultRange}
         </label>
         <div className="flex items-center gap-2">
             <div className="flex-1">
@@ -130,7 +152,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       <div className="space-y-1">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
             <X className="w-4 h-4" />
-            Zakres czynników
+            {t.factorRange}
         </label>
         <div className="flex items-center gap-2">
             <div className="flex-1">
@@ -155,21 +177,79 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
         </div>
       </div>
 
-      {/* Toggles */}
-      <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-100">
-        <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
-          <Divide className="w-4 h-4" />
-          Dzielenie
+      {/* Operation Toggles */}
+      <div className="space-y-1.5">
+        <label className="text-sm font-medium text-gray-700">{t.operations}</label>
+        
+        <div className="grid grid-cols-2 gap-1.5">
+          {/* Multiplication */}
+          <div className="flex items-center justify-between p-1.5 bg-gray-50 rounded-lg border border-gray-100">
+            <div className="flex items-center gap-1.5 text-xs font-medium text-gray-700">
+              <X className="w-3 h-3" />
+              {t.multiplication}
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.allowMultiplication}
+                onChange={(e) => handleChange('allowMultiplication', e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-8 h-4 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600"></div>
+            </label>
+          </div>
+
+          {/* Division */}
+          <div className="flex items-center justify-between p-1.5 bg-gray-50 rounded-lg border border-gray-100">
+            <div className="flex items-center gap-1.5 text-xs font-medium text-gray-700">
+              <Divide className="w-3 h-3" />
+              {t.division}
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.allowDivision}
+                onChange={(e) => handleChange('allowDivision', e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-8 h-4 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600"></div>
+            </label>
+          </div>
+
+          {/* Addition */}
+          <div className="flex items-center justify-between p-1.5 bg-gray-50 rounded-lg border border-gray-100">
+            <div className="flex items-center gap-1.5 text-xs font-medium text-gray-700">
+              <Plus className="w-3 h-3" />
+              {t.addition}
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.allowAddition}
+                onChange={(e) => handleChange('allowAddition', e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-8 h-4 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600"></div>
+            </label>
+          </div>
+
+          {/* Subtraction */}
+          <div className="flex items-center justify-between p-1.5 bg-gray-50 rounded-lg border border-gray-100">
+            <div className="flex items-center gap-1.5 text-xs font-medium text-gray-700">
+              <Minus className="w-3 h-3" />
+              {t.subtraction}
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.allowSubtraction}
+                onChange={(e) => handleChange('allowSubtraction', e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-8 h-4 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600"></div>
+            </label>
+          </div>
         </div>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            checked={settings.allowDivision}
-            onChange={(e) => handleChange('allowDivision', e.target.checked)}
-            className="sr-only peer"
-          />
-          <div className="w-10 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
-        </label>
       </div>
 
       <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">
@@ -178,14 +258,14 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           className="w-full flex items-center justify-center gap-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 py-2 rounded-lg font-medium transition-colors text-sm"
         >
           <RefreshCw className="w-4 h-4" />
-          Generuj nowy zestaw
+          {t.generateNew}
         </button>
         <button
           onClick={onPrint}
           className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700 py-2 rounded-lg font-medium shadow-md transition-all hover:shadow-lg text-sm"
         >
           <Printer className="w-4 h-4" />
-          Drukuj arkusz
+          {t.printWorksheet}
         </button>
       </div>
     </div>

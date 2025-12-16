@@ -3,13 +3,17 @@ import SettingsPanel from './components/SettingsPanel';
 import Worksheet from './components/Worksheet';
 import { GeneratorSettings, MathProblem } from './types';
 import { generateProblems } from './services/mathGenerator';
+import { Language, translations } from './locales';
 
 const App: React.FC = () => {
   const [settings, setSettings] = useState<GeneratorSettings>({
     problemCount: 20,
     columns: 4,
     copies: 2, 
+    allowMultiplication: true,
     allowDivision: true,
+    allowAddition: false,
+    allowSubtraction: false,
     minResult: 1,
     maxResult: 100,
     minFactor: 1,
@@ -17,6 +21,8 @@ const App: React.FC = () => {
   });
 
   const [columnsData, setColumnsData] = useState<MathProblem[][]>([]);
+  const [language, setLanguage] = useState<Language>('pl');
+  const t = translations[language];
 
   const generate = useCallback(() => {
     const newColumns: MathProblem[][] = [];
@@ -27,7 +33,12 @@ const App: React.FC = () => {
       // Generate one set for this group
       const groupSet = generateProblems(
         settings.problemCount, 
-        settings.allowDivision,
+        {
+          allowMultiplication: settings.allowMultiplication,
+          allowDivision: settings.allowDivision,
+          allowAddition: settings.allowAddition,
+          allowSubtraction: settings.allowSubtraction,
+        },
         settings.minResult,
         settings.maxResult,
         settings.minFactor,
@@ -63,7 +74,10 @@ const App: React.FC = () => {
     settings.problemCount,
     settings.columns,
     settings.copies,
+    settings.allowMultiplication,
     settings.allowDivision,
+    settings.allowAddition,
+    settings.allowSubtraction,
     settings.minResult,
     settings.maxResult,
     settings.minFactor,
@@ -82,8 +96,8 @@ const App: React.FC = () => {
         {/* Sidebar Controls - Hidden on Print */}
         <aside className="w-full lg:w-80 flex-shrink-0 no-print flex flex-col min-h-0 lg:max-h-full">
             <div className="flex-shrink-0 mb-2">
-               <h1 className="text-xl font-bold text-gray-800">Generator</h1>
-               <p className="text-gray-500 text-xs">Skonfiguruj i wydrukuj zadania.</p>
+               <h1 className="text-xl font-bold text-gray-800">{t.generator}</h1>
+               <p className="text-gray-500 text-xs">{t.configureAndPrint}</p>
             </div>
             <div className="flex-1 min-h-0 overflow-auto">
               <SettingsPanel
@@ -91,6 +105,8 @@ const App: React.FC = () => {
                 onSettingsChange={setSettings}
                 onGenerate={generate}
                 onPrint={handlePrint}
+                language={language}
+                onLanguageChange={setLanguage}
               />
             </div>
         </aside>
