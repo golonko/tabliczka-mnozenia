@@ -11,6 +11,9 @@ export const generateProblems = (
   const problems: MathProblem[] = [];
   const operations = allowDivision ? ['multiply', 'divide'] : ['multiply'];
   
+  // Track used problems to avoid duplicates within the set
+  const usedProblems = new Set<string>();
+  
   // Safety break to prevent infinite loops if range is impossible
   let attempts = 0;
   const MAX_ATTEMPTS = count * 100;
@@ -66,6 +69,10 @@ export const generateProblems = (
       operandB = divisor;
       display = `${operandA} : ${operandB} =`;
     }
+
+    // Skip if this exact problem was already generated
+    if (usedProblems.has(display)) continue;
+    usedProblems.add(display);
 
     problems.push({
       id: `prob-${Date.now()}-${problems.length}-${Math.random()}`,
