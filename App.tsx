@@ -102,7 +102,7 @@ const App: React.FC = () => {
       </main>
       
       {/* Footer - Hidden on Print */}
-      <footer className="flex-shrink-0 bg-white border-t border-gray-200 py-3 text-center text-sm text-gray-500 no-print">
+      <footer className="flex-shrink-0 bg-white border-t border-gray-200 py-3 text-center text-sm text-gray-500 no-print print:hidden print:!p-0 print:!m-0 print:!h-0 print:!border-0">
         <p>&copy; {new Date().getFullYear()} Wojciech Gołowkow.</p>
       </footer>
     </div>
