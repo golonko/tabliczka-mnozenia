@@ -1,6 +1,6 @@
 import React from 'react';
 import { GeneratorSettings } from '../types';
-import { Settings, Printer, RefreshCw, Divide, Copy, Hash, X, Columns, FileStack } from 'lucide-react';
+import { Settings, Printer, RefreshCw, Divide, Copy, Hash, X, Columns } from 'lucide-react';
 
 interface SettingsPanelProps {
   settings: GeneratorSettings;
@@ -170,25 +170,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           />
           <div className="w-10 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
         </label>
-      </div>
-
-      {/* Page Count */}
-      <div className="space-y-1">
-        <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-          <FileStack className="w-4 h-4" />
-          Liczba stron do wydruku
-          <span className="ml-auto text-indigo-600 font-bold">{settings.pageCount}</span>
-        </label>
-        <input
-          type="range"
-          min="1"
-          max="10"
-          step="1"
-          value={settings.pageCount}
-          onChange={(e) => handleChange('pageCount', parseInt(e.target.value))}
-          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
-        />
-        <p className="text-xs text-gray-500">Każda strona będzie miała inne działania</p>
       </div>
 
       <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">

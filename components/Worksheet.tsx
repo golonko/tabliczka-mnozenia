@@ -3,55 +3,39 @@ import { MathProblem } from '../types';
 import { Scissors } from 'lucide-react';
 
 interface WorksheetProps {
-  pagesData: MathProblem[][][]; // Array of pages, each page has columnsData
-}
-
-interface SinglePageProps {
   columnsData: MathProblem[][];
-  pageIndex: number;
-  totalPages: number;
-  isScreenPreview: boolean;
 }
 
-const SinglePage: React.FC<SinglePageProps> = ({ columnsData, pageIndex, totalPages, isScreenPreview }) => {
+const Worksheet: React.FC<WorksheetProps> = ({ columnsData }) => {
   const problemCount = columnsData[0]?.length || 0;
   const columnCount = columnsData.length;
 
-  // For screen preview: use container query units for auto-scaling
-  // For print: use viewport-based calculation since container queries don't work well in print
-  const screenVerticalFontSize = `calc(75cqh / ${problemCount})`;
-  const screenHorizontalFontSize = `8cqw`;
-  const screenFontSize = `min(${screenVerticalFontSize}, ${screenHorizontalFontSize})`;
-  const screenClampedFontSize = `clamp(9px, ${screenFontSize}, 28px)`;
+  // Calculate font size using BOTH vertical and horizontal constraints
+  // Using container query units (cqh/cqw) for automatic scaling
   
-  // For print: calculate based on page dimensions (A4 ~297mm height, minus margins)
-  // ~260mm usable height, divided by problem count, converted to reasonable font size
-  const printFontSize = `clamp(9px, calc(240mm / ${problemCount}), 18px)`;
+  // Vertical: 75% of container height divided by problem count
+  const verticalFontSize = `calc(75cqh / ${problemCount})`;
   
-  const clampedFontSize = isScreenPreview ? screenClampedFontSize : printFontSize;
+  // Horizontal: ~4% of container width ensures enough room for:
+  // - problem number (3 chars) + equation (12 chars) + answer space (5+ chars)
+  // Monospace chars are ~0.6× font-size wide, so 4cqw → fits ~40 chars
+  const horizontalFontSize = `8cqw`;
+  
+  // Use the SMALLER of vertical/horizontal to prevent overflow in either direction
+  const fontSize = `min(${verticalFontSize}, ${horizontalFontSize})`;
+  
+  // Clamp the font size to reasonable bounds for readability
+  const clampedFontSize = `clamp(9px, ${fontSize}, 28px)`;
 
   return (
     <div 
-      className={`bg-white mx-auto relative flex flex-col w-full ${
-        isScreenPreview 
-          ? 'shadow-2xl p-4 h-full' 
-          : 'p-2'
-      }`}
-      style={{ 
-        pageBreakAfter: pageIndex < totalPages - 1 ? 'always' : 'auto',
-        breakAfter: pageIndex < totalPages - 1 ? 'page' : 'auto',
-        pageBreakInside: 'avoid', 
-        breakInside: 'avoid',
-        // For print: use fixed page height
-        ...(!isScreenPreview && { height: '100vh', maxHeight: '100vh' })
-      }}
+      className="bg-white shadow-2xl print:shadow-none mx-auto p-4 print:p-0 relative flex flex-col w-full h-full print:w-full print:h-full print:max-w-none print:max-h-none"
+      style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}
     >
       {/* Visual aid for screen only */}
-      {isScreenPreview && (
-        <div className="absolute top-0 right-0 p-2 bg-yellow-100 text-yellow-800 text-xs rounded-bl-lg font-medium z-10">
-          Strona {pageIndex + 1}/{totalPages} ({columnCount} kolumn)
-        </div>
-      )}
+      <div className="absolute top-0 right-0 p-2 bg-yellow-100 text-yellow-800 text-xs rounded-bl-lg print:hidden font-medium z-10">
+        Podgląd ({columnCount} kolumn)
+      </div>
 
       <div className="flex-1 flex w-full min-h-0 overflow-hidden">
         {columnsData.map((problems, colIndex) => (
@@ -59,10 +43,10 @@ const SinglePage: React.FC<SinglePageProps> = ({ columnsData, pageIndex, totalPa
             {/* Column */}
             <div className="flex-1 flex flex-col min-h-0 relative px-2">
               
-              {/* Problems container */}
+              {/* Problems container with CSS container query for auto-scaling */}
               <div 
                 className="flex-1 min-h-0"
-                style={isScreenPreview ? { containerType: 'size' } : {}}
+                style={{ containerType: 'size' }}
               >
                 {/* CSS Grid distributes rows evenly - browser handles all spacing */}
                 <div 
@@ -98,7 +82,7 @@ const SinglePage: React.FC<SinglePageProps> = ({ columnsData, pageIndex, totalPa
 
                       {/* Answer Line - uses em units to scale with font */}
                       <div 
-                        className={`flex-1 border-b-2 border-dotted ${isScreenPreview ? 'border-gray-300' : 'border-gray-400'}`}
+                        className="flex-1 border-b-2 border-dotted border-gray-300 print:border-gray-400"
                         style={{ 
                           marginLeft: '0.5em',
                           minHeight: '0.5em',
@@ -122,7 +106,7 @@ const SinglePage: React.FC<SinglePageProps> = ({ columnsData, pageIndex, totalPa
 
             {/* Vertical Divider */}
             {colIndex < columnsData.length - 1 && (
-              <div className={`w-px relative border-l border-dashed ${isScreenPreview ? 'border-gray-300' : 'border-gray-400'} h-full mx-1 flex flex-col items-center justify-center flex-shrink-0`}>
+              <div className="w-px relative border-l border-dashed border-gray-300 print:border-gray-400 h-full mx-1 flex flex-col items-center justify-center flex-shrink-0">
                 <div className="bg-white p-1 absolute top-10">
                   <Scissors className="w-3 h-3 text-gray-400" />
                 </div>
@@ -135,38 +119,6 @@ const SinglePage: React.FC<SinglePageProps> = ({ columnsData, pageIndex, totalPa
         ))}
       </div>
     </div>
-  );
-};
-
-const Worksheet: React.FC<WorksheetProps> = ({ pagesData }) => {
-  if (pagesData.length === 0) return null;
-
-  // Show only the first page in preview mode (screen), but all pages in print
-  return (
-    <>
-      {/* Screen preview: only show first page */}
-      <div className="print:hidden w-full h-full">
-        <SinglePage 
-          columnsData={pagesData[0]} 
-          pageIndex={0} 
-          totalPages={pagesData.length} 
-          isScreenPreview={true}
-        />
-      </div>
-      
-      {/* Print: show all pages */}
-      <div className="hidden print:block">
-        {pagesData.map((columnsData, pageIndex) => (
-          <SinglePage
-            key={pageIndex}
-            columnsData={columnsData}
-            pageIndex={pageIndex}
-            totalPages={pagesData.length}
-            isScreenPreview={false}
-          />
-        ))}
-      </div>
-    </>
   );
 };
 
