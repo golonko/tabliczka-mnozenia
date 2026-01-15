@@ -6,6 +6,7 @@ import { GeneratorSettings, MathProblem } from './types';
 import { generateProblems } from './services/mathGenerator';
 import { Language, translations } from './locales';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/react"
  
 type Page = 'generator' | 'exercise';
 
@@ -111,6 +112,7 @@ const App: React.FC = () => {
           onBackToGenerator={handleBackToGenerator}
         />
         <Analytics />
+        <SpeedInsights />
       </div>
     );
   }
@@ -150,6 +152,7 @@ const App: React.FC = () => {
         <p>&copy; {new Date().getFullYear()} Wojciech Gołowkow.</p>
       </footer>
       <Analytics />
+      <SpeedInsights />
     </div>
   );
 };
