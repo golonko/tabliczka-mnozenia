@@ -1,47 +1,63 @@
 <!DOCTYPE html>
 <html lang="pl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Generator Zadań z Tabliczki Mnożenia</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-      
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generator Zadań z Tabliczki Mnożenia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    (function () 
+    { 
+      const script = document.createElement('script'); 
+      script.src = 'https://opinionflow.vercel.app/widget.js'; 
+      script.dataset.userId = 'uid_rjg044svh'; 
+      document.head.appendChild(script); })();
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f3f4f6;
+    }
+
+    /* Print specific overrides */
+    /* Note: @page rules are injected dynamically by App.tsx based on layout setting */
+    @media print {
+
+      html,
       body {
-        font-family: 'Inter', sans-serif;
-        background-color: #f3f4f6;
+        background: white;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
       }
 
-      /* Print specific overrides */
-      /* Note: @page rules are injected dynamically by App.tsx based on layout setting */
-      @media print {
-        html, body {
-          background: white;
-          margin: 0;
-          padding: 0;
-          width: 100%;
-          height: 100%;
-          overflow: visible;
-        }
-        #root {
-          width: 100%;
-          height: 100%;
-          display: block;
-        }
-        .no-print {
-          display: none !important;
-        }
-        .print-only {
-          display: block !important;
-        }
-        /* Ensure background colors/borders print correctly */
-        * {
-          -webkit-print-color-adjust: exact !important;
-          print-color-adjust: exact !important;
-        }
+      #root {
+        width: 100%;
+        height: 100%;
+        display: block;
       }
-    </style>
+
+      .no-print {
+        display: none !important;
+      }
+
+      .print-only {
+        display: block !important;
+      }
+
+      /* Ensure background colors/borders print correctly */
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -52,10 +68,12 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+  <link rel="stylesheet" href="/index.css">
 </head>
-  <body>
-    <div id="root"></div>
+
+<body>
+  <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>
