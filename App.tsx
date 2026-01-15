@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import SettingsPanel from './components/SettingsPanel';
 import Worksheet from './components/Worksheet';
 import InteractiveExercise from './components/InteractiveExercise';
@@ -7,11 +8,8 @@ import { generateProblems } from './services/mathGenerator';
 import { Language, translations } from './locales';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from "@vercel/speed-insights/react"
- 
-type Page = 'generator' | 'exercise';
 
 const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<Page>('generator');
   const [settings, setSettings] = useState<GeneratorSettings>({
     problemCount: 20,
     columns: 4,
@@ -94,28 +92,63 @@ const App: React.FC = () => {
     window.print();
   };
 
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/test" element={
+          <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">
+            <InteractiveExercise
+              settings={settings}
+              language={language}
+              onLanguageChange={setLanguage}
+            />
+            <Analytics />
+            <SpeedInsights />
+          </div>
+        } />
+        <Route path="/" element={
+          <GeneratorPage
+            settings={settings}
+            setSettings={setSettings}
+            columnsData={columnsData}
+            generate={generate}
+            handlePrint={handlePrint}
+            language={language}
+            setLanguage={setLanguage}
+            t={t}
+          />
+        } />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+interface GeneratorPageProps {
+  settings: GeneratorSettings;
+  setSettings: React.Dispatch<React.SetStateAction<GeneratorSettings>>;
+  columnsData: MathProblem[][];
+  generate: () => void;
+  handlePrint: () => void;
+  language: Language;
+  setLanguage: React.Dispatch<React.SetStateAction<Language>>;
+  t: typeof translations['pl'];
+}
+
+const GeneratorPage: React.FC<GeneratorPageProps> = ({
+  settings,
+  setSettings,
+  columnsData,
+  generate,
+  handlePrint,
+  language,
+  setLanguage,
+  t,
+}) => {
+  const navigate = useNavigate();
+
   const handleStartExercise = () => {
-    setCurrentPage('exercise');
+    navigate('/test');
   };
-
-  const handleBackToGenerator = () => {
-    setCurrentPage('generator');
-  };
-
-  if (currentPage === 'exercise') {
-    return (
-      <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">
-        <InteractiveExercise
-          settings={settings}
-          language={language}
-          onLanguageChange={setLanguage}
-          onBackToGenerator={handleBackToGenerator}
-        />
-        <Analytics />
-        <SpeedInsights />
-      </div>
-    );
-  }
 
   return (
     <div className="h-screen flex flex-col bg-gray-50 overflow-hidden print:h-full print:overflow-visible print:block">

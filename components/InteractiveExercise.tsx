@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MathProblem, GeneratorSettings } from '../types';
 import { Language, translations } from '../locales';
 import { generateProblems } from '../services/mathGenerator';
@@ -8,7 +9,6 @@ interface InteractiveExerciseProps {
   settings: GeneratorSettings;
   language: Language;
   onLanguageChange: (lang: Language) => void;
-  onBackToGenerator: () => void;
 }
 
 interface ProblemAnswer {
@@ -22,8 +22,8 @@ const InteractiveExercise: React.FC<InteractiveExerciseProps> = ({
   settings,
   language,
   onLanguageChange,
-  onBackToGenerator,
 }) => {
+  const navigate = useNavigate();
   const t = translations[language];
   const [problems, setProblems] = useState<MathProblem[]>([]);
   const [answers, setAnswers] = useState<ProblemAnswer[]>([]);
@@ -131,7 +131,7 @@ const InteractiveExercise: React.FC<InteractiveExerciseProps> = ({
                 </button>
               </div>
               <button
-                onClick={onBackToGenerator}
+                onClick={() => navigate('/')}
                 className="flex items-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-lg font-medium transition-colors"
               >
                 <Home className="w-4 h-4" />
