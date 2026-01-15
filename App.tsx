@@ -5,6 +5,7 @@ import InteractiveExercise from './components/InteractiveExercise';
 import { GeneratorSettings, MathProblem } from './types';
 import { generateProblems } from './services/mathGenerator';
 import { Language, translations } from './locales';
+import { Analytics } from '@vercel/analytics/react';
  
 type Page = 'generator' | 'exercise';
 
@@ -109,6 +110,7 @@ const App: React.FC = () => {
           onLanguageChange={setLanguage}
           onBackToGenerator={handleBackToGenerator}
         />
+        <Analytics />
       </div>
     );
   }
@@ -147,6 +149,7 @@ const App: React.FC = () => {
       <footer className="flex-shrink-0 bg-white border-t border-gray-200 py-3 text-center text-sm text-gray-500 no-print print:hidden print:!p-0 print:!m-0 print:!h-0 print:!border-0">
         <p>&copy; {new Date().getFullYear()} Wojciech Gołowkow.</p>
       </footer>
+      <Analytics />
     </div>
   );
 };
