@@ -8,6 +8,8 @@ export const translations = {
     problemsPerColumn: 'Liczba działań na kolumnę',
     resultRange: 'Zakres wyników',
     factorRange: 'Zakres czynników',
+    reversedResultRange: 'Zakres zostanie użyty od mniejszej do większej wartości.',
+    reversedFactorRange: 'Zakres czynników zostanie użyty od mniejszej do większej wartości.',
     operations: 'Działania',
     multiplication: 'Mnożenie',
     division: 'Dzielenie',
@@ -32,6 +34,8 @@ export const translations = {
     problemsPerColumn: 'Problems per column',
     resultRange: 'Result range',
     factorRange: 'Factor range',
+    reversedResultRange: 'Range will be used from the smaller value to the larger value.',
+    reversedFactorRange: 'Factor range will be used from the smaller value to the larger value.',
     operations: 'Operations',
     multiplication: 'Multiplication',
     division: 'Division',
@@ -52,4 +56,3 @@ export const translations = {
 } as const;
 
 export type TranslationKey = keyof typeof translations.pl;
-

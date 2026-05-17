@@ -1,0 +1,26 @@
+schema: spec-driven
+
+# Project context (optional)
+# This is shown to AI when creating artifacts.
+# Add your tech stack, conventions, style guides, domain knowledge, etc.
+# Example:
+#   context: |
+#     Tech stack: TypeScript, React, Node.js
+#     We use conventional commits
+#     Domain: e-commerce platform
+context: |
+  Tech stack: React 19, TypeScript 5.8, Vite 6, Tailwind CSS via CDN, lucide-react icons.
+  Domain: bilingual Polish/English arithmetic worksheet generator and interactive exercise app for children.
+  Routes: "/" renders the worksheet generator; "/test" renders interactive exercises.
+  Key files: App.tsx, components/*.tsx, services/mathGenerator.ts, types.ts, locales.ts, index.html.
+  Verification: no automated test suite currently; run "npm run build" and manually check affected generator, exercise, language, and print-preview flows.
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours

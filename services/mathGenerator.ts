@@ -7,6 +7,11 @@ interface GenerateOptions {
   allowSubtraction: boolean;
 }
 
+const normalizeRange = (first: number, second: number): [number, number] => [
+  Math.min(first, second),
+  Math.max(first, second),
+];
+
 export const generateProblems = (
   count: number, 
   options: GenerateOptions,
@@ -16,6 +21,11 @@ export const generateProblems = (
   maxFactorLimit: number
 ): MathProblem[] => {
   const problems: MathProblem[] = [];
+  const [effectiveMinResult, effectiveMaxResult] = normalizeRange(minResult, maxResult);
+  const [effectiveMinFactorLimit, effectiveMaxFactorLimit] = normalizeRange(
+    minFactorLimit,
+    maxFactorLimit
+  );
   
   // Build operations list based on what's allowed
   const operations: ('multiply' | 'divide' | 'add' | 'subtract')[] = [];
@@ -45,19 +55,19 @@ export const generateProblems = (
 
     if (operation === 'multiply' || operation === 'divide') {
       // Strategy for multiplication/division:
-      // 1. Pick Factor A randomly between minFactorLimit and maxFactorLimit
-      // 2. Calculate valid range for Factor B so that product is within [minResult, maxResult]
-      // 3. Ensure Factor B is also within [minFactorLimit, maxFactorLimit]
+      // 1. Pick Factor A randomly between effectiveMinFactorLimit and effectiveMaxFactorLimit
+      // 2. Calculate valid range for Factor B so that product is within [effectiveMinResult, effectiveMaxResult]
+      // 3. Ensure Factor B is also within [effectiveMinFactorLimit, effectiveMaxFactorLimit]
 
-      const factorA = Math.floor(Math.random() * (maxFactorLimit - minFactorLimit + 1)) + minFactorLimit; 
+      const factorA = Math.floor(Math.random() * (effectiveMaxFactorLimit - effectiveMinFactorLimit + 1)) + effectiveMinFactorLimit; 
       
       // Calculate bounds for Factor B based on A to stay within Result Range
-      const minB_from_result = Math.ceil(minResult / factorA);
-      const maxB_from_result = Math.floor(maxResult / factorA);
+      const minB_from_result = Math.ceil(effectiveMinResult / factorA);
+      const maxB_from_result = Math.floor(effectiveMaxResult / factorA);
 
       // Factor B must also respect the global factor limits
-      const minB = Math.max(minFactorLimit, minB_from_result);
-      const maxB = Math.min(maxFactorLimit, maxB_from_result);
+      const minB = Math.max(effectiveMinFactorLimit, minB_from_result);
+      const maxB = Math.min(effectiveMaxFactorLimit, maxB_from_result);
 
       // If range is invalid, retry with a new Factor A
       if (maxB < minB) continue; 
@@ -66,7 +76,7 @@ export const generateProblems = (
       const product = factorA * factorB;
 
       // Double check constraints (redundant but safe)
-      if (product < minResult || product > maxResult) continue;
+      if (product < effectiveMinResult || product > effectiveMaxResult) continue;
 
       if (operation === 'multiply') {
         // Randomize order of factors
@@ -89,17 +99,17 @@ export const generateProblems = (
     } else if (operation === 'add') {
       // Addition: A + B = result (result should be in range)
       // Pick a target result first, then split it into two operands
-      const targetResult = Math.floor(Math.random() * (maxResult - minResult + 1)) + minResult;
+      const targetResult = Math.floor(Math.random() * (effectiveMaxResult - effectiveMinResult + 1)) + effectiveMinResult;
       
-      // operandA can be from minFactorLimit to min(maxFactorLimit, targetResult - minFactorLimit)
-      const maxA = Math.min(maxFactorLimit, targetResult - minFactorLimit);
-      if (maxA < minFactorLimit) continue;
+      // operandA can be from effectiveMinFactorLimit to min(effectiveMaxFactorLimit, targetResult - effectiveMinFactorLimit)
+      const maxA = Math.min(effectiveMaxFactorLimit, targetResult - effectiveMinFactorLimit);
+      if (maxA < effectiveMinFactorLimit) continue;
       
-      operandA = Math.floor(Math.random() * (maxA - minFactorLimit + 1)) + minFactorLimit;
+      operandA = Math.floor(Math.random() * (maxA - effectiveMinFactorLimit + 1)) + effectiveMinFactorLimit;
       operandB = targetResult - operandA;
       
       // Ensure operandB is within factor limits
-      if (operandB < minFactorLimit || operandB > maxFactorLimit) continue;
+      if (operandB < effectiveMinFactorLimit || operandB > effectiveMaxFactorLimit) continue;
       
       display = `${operandA} + ${operandB} =`;
     } else if (operation === 'subtract') {
@@ -107,15 +117,15 @@ export const generateProblems = (
       // Pick operandA (the larger number) and operandB such that A - B is in result range
       
       // Result = A - B, so A = Result + B
-      // We want: minResult <= A - B <= maxResult
-      // And: minFactorLimit <= A, B <= maxFactorLimit
+      // We want: effectiveMinResult <= A - B <= effectiveMaxResult
+      // And: effectiveMinFactorLimit <= A, B <= effectiveMaxFactorLimit
       
-      operandA = Math.floor(Math.random() * (maxFactorLimit - minFactorLimit + 1)) + minFactorLimit;
+      operandA = Math.floor(Math.random() * (effectiveMaxFactorLimit - effectiveMinFactorLimit + 1)) + effectiveMinFactorLimit;
       
-      // B must satisfy: A - maxResult <= B <= A - minResult
-      // And: minFactorLimit <= B <= maxFactorLimit
-      const minB = Math.max(minFactorLimit, operandA - maxResult);
-      const maxB = Math.min(maxFactorLimit, operandA - minResult);
+      // B must satisfy: A - effectiveMaxResult <= B <= A - effectiveMinResult
+      // And: effectiveMinFactorLimit <= B <= effectiveMaxFactorLimit
+      const minB = Math.max(effectiveMinFactorLimit, operandA - effectiveMaxResult);
+      const maxB = Math.min(effectiveMaxFactorLimit, operandA - effectiveMinResult);
       
       if (maxB < minB || maxB < 0) continue;
       
@@ -123,7 +133,7 @@ export const generateProblems = (
       
       // Ensure result is non-negative and in range
       const result = operandA - operandB;
-      if (result < minResult || result > maxResult) continue;
+      if (result < effectiveMinResult || result > effectiveMaxResult) continue;
       
       display = `${operandA} − ${operandB} =`;
     }

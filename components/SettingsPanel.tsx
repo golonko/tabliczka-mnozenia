@@ -23,6 +23,9 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onLanguageChange,
 }) => {
   const t = translations[language];
+  const isResultRangeReversed = settings.minResult > settings.maxResult;
+  const isFactorRangeReversed = settings.minFactor > settings.maxFactor;
+
   const handleChange = <K extends keyof GeneratorSettings>(
     key: K,
     value: GeneratorSettings[K]
@@ -133,7 +136,9 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     type="number" 
                     value={settings.minResult}
                     onChange={(e) => handleChange('minResult', Math.max(1, parseInt(e.target.value) || 0))}
-                    className="w-full p-1.5 border border-gray-300 rounded-lg text-sm"
+                    className={`w-full p-1.5 border rounded-lg text-sm ${
+                      isResultRangeReversed ? 'border-amber-300 bg-amber-50' : 'border-gray-300'
+                    }`}
                     placeholder="Od"
                 />
             </div>
@@ -142,12 +147,17 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 <input 
                     type="number" 
                     value={settings.maxResult}
-                    onChange={(e) => handleChange('maxResult', Math.max(settings.minResult, parseInt(e.target.value) || 0))}
-                    className="w-full p-1.5 border border-gray-300 rounded-lg text-sm"
+                    onChange={(e) => handleChange('maxResult', Math.max(1, parseInt(e.target.value) || 0))}
+                    className={`w-full p-1.5 border rounded-lg text-sm ${
+                      isResultRangeReversed ? 'border-amber-300 bg-amber-50' : 'border-gray-300'
+                    }`}
                     placeholder="Do"
                 />
             </div>
         </div>
+        {isResultRangeReversed && (
+          <p className="text-[11px] leading-snug text-amber-700">{t.reversedResultRange}</p>
+        )}
       </div>
 
       {/* Factor Range */}
@@ -161,8 +171,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 <input 
                     type="number" 
                     value={settings.minFactor}
-                    onChange={(e) => handleChange('minFactor', Math.max(2, Math.min(settings.maxFactor, parseInt(e.target.value) || 2)))}
-                    className="w-full p-1.5 border border-gray-300 rounded-lg text-sm"
+                    onChange={(e) => handleChange('minFactor', Math.max(2, parseInt(e.target.value) || 2))}
+                    className={`w-full p-1.5 border rounded-lg text-sm ${
+                      isFactorRangeReversed ? 'border-amber-300 bg-amber-50' : 'border-gray-300'
+                    }`}
                     placeholder="Od"
                 />
             </div>
@@ -171,12 +183,17 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 <input 
                     type="number" 
                     value={settings.maxFactor}
-                    onChange={(e) => handleChange('maxFactor', Math.max(settings.minFactor, parseInt(e.target.value) || 2))}
-                    className="w-full p-1.5 border border-gray-300 rounded-lg text-sm"
+                    onChange={(e) => handleChange('maxFactor', Math.max(2, parseInt(e.target.value) || 2))}
+                    className={`w-full p-1.5 border rounded-lg text-sm ${
+                      isFactorRangeReversed ? 'border-amber-300 bg-amber-50' : 'border-gray-300'
+                    }`}
                     placeholder="Do"
                 />
             </div>
         </div>
+        {isFactorRangeReversed && (
+          <p className="text-[11px] leading-snug text-amber-700">{t.reversedFactorRange}</p>
+        )}
       </div>
 
       {/* Operation Toggles */}
